@@ -1,0 +1,31 @@
+name: dartclassgenerator
+description: A Flutter that can generate Dart classes. Runs on Android and Web.
+publish_to: 'none' 
+version: 0.0.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.3
+  groovin_widgets: ^1.5.0+1
+  google_fonts: ^0.5.0+1
+  dart_style: ^1.3.4
+  material_design_icons_flutter: ^4.0.5045
+  provider: ^4.0.5
+  rxdart: ^0.24.0
+  flutter_syntax_view:
+    git: https://github.com/rodydavis/flutter_syntax_view
+  syntax_highlighter:
+    git: https://github.com/rodydavis/syntax_highlighter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
