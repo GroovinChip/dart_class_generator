@@ -1,6 +1,6 @@
 # dart_class_generator
 
-A Flutter that can generate Dart classes. Runs on Android and Web. Check out the web app at [link]
+A Flutter that can generate Dart classes. Runs on Android and Web. Check out the web app [here](https://groovinchip.github.io/dart_class_generator/#/)
 
 ### Notes:
 - Plans for supported platforms include Windows and possibly iOS and macOS.
