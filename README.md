@@ -12,8 +12,9 @@ A Flutter that can generate Dart classes. Runs on Android, Windows and Web. Chec
   - Toggle a `const` constructor
   - Toggle `final` class members
   - Toggle named parameters
-  - Add as many class members as you want
+  - Add/remove as many class members as you want
   - Add dartdoc comments to the class name and every class member
+  - Make any class member private or final
 - Currently supports the following data types for class members:
   - `String`
   - `int`
