@@ -20,21 +20,25 @@ class _SettingsDialogState extends State<SettingsDialog> {
   Widget build(BuildContext context) {
     final _settingsBloc = Provider.of<SettingsBloc>(context);
     return StreamBuilder(
-      stream: CombineLatestStream.combine2(
+      stream: CombineLatestStream.combine3(
         _settingsBloc.lineNumbersStream,
         _settingsBloc.codeFontSizeStream,
-        (bool lineNumsOn, double fontSize) => [
+        _settingsBloc.codeEditingStream,
+        (bool lineNumsOn, double fontSize, bool codeEditingOn) => [
           lineNumsOn,
           fontSize,
+          codeEditingOn,
         ],
       ),
       initialData: [
         _settingsBloc.lineNumbersStream.value,
-        _settingsBloc.codeFontSizeStream.value
+        _settingsBloc.codeFontSizeStream.value,
+        _settingsBloc.codeEditingStream.value,
       ],
       builder: (context, snapshot) {
         bool _lineNumsOn = snapshot.data[0];
         double _fontSize = snapshot.data[1];
+        bool _codeEditingOn = snapshot.data[2];
         return SimpleDialog(
           title: Text('Settings'),
           children: [
@@ -43,6 +47,14 @@ class _SettingsDialogState extends State<SettingsDialog> {
               title: Text('Show line numbers'),
               onChanged: (linesOn) {
                 _settingsBloc.lineNumbersOn.add(linesOn);
+              },
+              activeColor: Theme.of(context).accentColor,
+            ),
+            SwitchListTile(
+              value: _codeEditingOn,
+              title: Text('Allow direct code editing'),
+              onChanged: (codeEditingOn) {
+                _settingsBloc.codeEditingOn.add(codeEditingOn);
               },
               activeColor: Theme.of(context).accentColor,
             ),

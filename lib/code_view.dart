@@ -21,6 +21,7 @@ class CodeView extends StatefulWidget {
   @override
   _CodeViewState createState() => _CodeViewState();
 }
+
 class _CodeViewState extends State<CodeView> {
   final _controller = CodeEditingController();
   @override
@@ -29,11 +30,13 @@ class _CodeViewState extends State<CodeView> {
     _controller.addListener(_onChanged);
     super.initState();
   }
+
   void _onChanged() {
     if (widget.onChanged != null) {
       widget.onChanged(_controller.text);
     }
   }
+
   @override
   void didUpdateWidget(CodeView oldWidget) {
     if (oldWidget.data != widget.data) {
@@ -43,11 +46,13 @@ class _CodeViewState extends State<CodeView> {
     }
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -69,14 +74,22 @@ class _CodeViewState extends State<CodeView> {
         _syntax = Syntax.JAVA;
       }
     }
-    final _theme = !isDark ? SyntaxTheme.standard() : SyntaxTheme.dracula();
-    return SyntaxView(
-      code: widget.data,
-      syntax: _syntax,
-      syntaxTheme: _theme,
-      withZoom: true,
-      withLinesCount: widget.showLineNumbers,
-      fontSize: widget.fontSize,
-    );
+    final _theme = !isDark ? SyntaxTheme.standard() : SyntaxTheme.oceanSunset();
+    return !widget.edit
+        ? SyntaxView(
+            code: _controller.text,
+            syntax: _syntax,
+            syntaxTheme: _theme,
+            withZoom: true,
+            withLinesCount: widget.showLineNumbers,
+            fontSize: widget.fontSize,
+          )
+        : SyntaxEditableView(
+            syntax: Syntax.DART,
+            syntaxTheme: _theme,
+            controller: _controller,
+            withZoom: true,
+            withLinesCount: widget.showLineNumbers,
+          );
   }
 }
