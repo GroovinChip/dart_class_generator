@@ -1,3 +1,7 @@
+# 0.0.5 (4/17/2019)
+- Toggle editable code view
+- Copying code to clipboard now works on Windows
+
 # 0.0.4 (4/16/2019)
 - Support for dartdoc comments!
 

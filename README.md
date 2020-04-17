@@ -23,6 +23,7 @@ A Flutter that can generate Dart classes. Runs on Android and Web. Check out the
   - `DateTime`
 - View the dynamically generated code and copy it to the clipboard. On Web/Desktop/Tablet you can create the class and see the generated code on the same screen. On mobile you will navigate to a separate view to see and copy the code.
 - Toggle line numbers on or off for the code preview
+- Toggle the code view from read-only to editable (note: the editable code view does not currently support copying, nor will the cursor accurately reflect where you have clicked. This will hopefully be resolved soon.)
 - Set the preferred font size for the code preview
 
 ## Planned (in no particular order):
@@ -43,3 +44,5 @@ A Flutter that can generate Dart classes. Runs on Android and Web. Check out the
 ## Bugs
 - `Divider` widgets do not show on web
 - Backspacing the class name textfield until no characters are left crashes the code viewer
+- Editable code view does not support selecting and copying code
+- Editable code view does not accurately reflect the cursor location
