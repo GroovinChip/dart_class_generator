@@ -45,5 +45,5 @@ A Flutter that can generate Dart classes. Runs on Android and Web. Check out the
 - `Divider` widgets do not show on web
 - Backspacing the class name textfield until no characters are left crashes the code viewer
 - Editable code view does not support selecting and copying code
-- Editable code view does not accurately reflect the cursor location
+- Editable code view does not accurately reflect the cursor location on web/windows
 - Editable code view font size is not configurable
