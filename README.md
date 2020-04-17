@@ -28,7 +28,6 @@ A Flutter that can generate Dart classes. Runs on Android and Web. Check out the
 - Generate custom toString()
 - Set default data for class members
 - Export code screenshot
-- Tablet UI support
 - Generate instantiated classes (with mock data) from created class
 - Class templates
 - json_serializable support

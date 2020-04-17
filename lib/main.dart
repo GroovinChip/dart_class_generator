@@ -20,7 +20,6 @@ import 'package:rxdart/rxdart.dart';
 //todo: disallow duplicate members
 //todo: functions?
 //todo: export code screenshot
-//todo: tablet and mobile layouts
 //todo: default values for members
 //todo: generate instantiated classes
 //todo: class templates
@@ -104,7 +103,16 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
     final _settingsBloc = Provider.of<SettingsBloc>(context);
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        if (constraints.maxWidth >= kDesktopBreakpoint) {
+        if (constraints.maxWidth >= kTabletBreakpoint) {
+          double _classCreatorWidth;
+          bool _isTablet;
+          if (constraints.maxWidth >= kDesktopBreakpoint) {
+            _classCreatorWidth = kDesktopClassCreatorWidth;
+            _isTablet = false;
+          } else {
+            _classCreatorWidth = kTabletClassCreatorWidth;
+            _isTablet = true;
+          };
           return Scaffold(
             appBar: AppBar(
               /*leading: Tooltip(
@@ -149,7 +157,7 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
             body: Row(
               children: [
                 Container(
-                  width: 400,
+                  width: _classCreatorWidth,
                   child: Column(
                     children: [
                       GroovinExpansionTile(
@@ -483,10 +491,10 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                 Expanded(
                   child: Center(
                     child: Card(
-                      elevation: 6,
+                      elevation: !_isTablet ? 6 : 0,
                       child: Container(
-                        height: constraints.maxHeight / 1.5,
-                        width: constraints.maxWidth / 2,
+                        height: !_isTablet ? constraints.maxHeight / 1.5 : constraints.maxHeight,
+                        width: !_isTablet ? constraints.maxWidth / 2 : constraints.maxWidth,
                         child: StreamBuilder(
                           stream: CombineLatestStream.combine2(
                             _settingsBloc.lineNumbersStream,
