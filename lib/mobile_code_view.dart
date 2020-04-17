@@ -157,7 +157,7 @@ class _MobileCodeViewState extends State<MobileCodeView> {
           }
           final _theme =
               !isDark ? SyntaxTheme.standard() : SyntaxTheme.oceanSunset();
-          return _codeEditingOn
+          return !_codeEditingOn
               ? SyntaxView(
                   code: _controller.text,
                   syntax: _syntax,

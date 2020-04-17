@@ -17,7 +17,6 @@ import 'package:rxdart/rxdart.dart';
 //todo: bug - backspacing class name until field is empty crashes code viewer. Oddly, clearing the field via the button does not.
 //todo: bug - dividers do not show on web
 //todo: disallow duplicate members
-//todo: settings - allow user to select codeview theme
 //todo: functions?
 //todo: export code screenshot
 //todo: export to gist, dartpad, codepen
@@ -31,6 +30,9 @@ import 'package:rxdart/rxdart.dart';
 //todo: support factories
 //todo: add JSON Serializable stuff
 //todo: dynamic font selection
+//todo: editable code view font size
+//todo: readonly code view font
+//todo: persist user settings
 
 void main() {
   runApp(MyApp());
