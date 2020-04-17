@@ -289,6 +289,13 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                         ],
                       ),
                       Divider(height: 0),
+                      GroovinExpansionTile(
+                        title: Text('Class Members'),
+                        initiallyExpanded: true,
+                        children: [
+
+                        ],
+                      ),
                       ListTile(
                         title: Text('Class Members'),
                         trailing: PopupMenuButton(

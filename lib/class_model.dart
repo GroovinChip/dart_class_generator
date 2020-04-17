@@ -57,7 +57,7 @@ class DartClass {
     }
     final _private = _members.where((element) => element.isPrivate).toList();
     if (_private.isNotEmpty) {
-      if (_members.isNotEmpty) {
+      if (_members.isNotEmpty && hasNamedParameters) {
         buffer.write('}');
       }
       buffer.write(') :');
