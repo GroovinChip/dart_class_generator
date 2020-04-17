@@ -39,7 +39,6 @@ A Flutter that can generate Dart classes. Runs on Android and Web. Check out the
 - Strong casing
 - Factory support
 - Info/help/about section in-app
-- PWA
 
 ## Bugs
 - Copying code to the clipboard does not work on Windows
