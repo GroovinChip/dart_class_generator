@@ -33,6 +33,8 @@ import 'package:rxdart/rxdart.dart';
 //todo: editable code view font size
 //todo: readonly code view font
 //todo: persist user settings
+//todo: show changelog on update?
+//todo: prompt user to download update on Windows, Android (?)
 
 void main() {
   runApp(MyApp());
