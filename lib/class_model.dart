@@ -29,7 +29,7 @@ class DartClass {
   String toString() {
     final buffer = StringBuffer();
     final _members = members ?? [];
-    final _dartdoc = dartdoc ?? '///todo: write documentation for $name';
+    final _dartdoc = dartdoc ?? '///todo: write documentation for class $name';
     buffer.writeln(_dartdoc);
     buffer.write('class $name');
     buffer.write(' {');

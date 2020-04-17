@@ -12,7 +12,8 @@ A Flutter that can generate Dart classes. Runs on Android and Web. Check out the
   - Toggle a `const` constructor
   - Toggle `final` class members
   - Toggle named parameters
-  - Add as many class members as you want.
+  - Add as many class members as you want
+  - Add dartdoc comments to the class name and every class member
 - Currently supports the following data types for class members:
   - `String`
   - `int`
@@ -27,7 +28,6 @@ A Flutter that can generate Dart classes. Runs on Android and Web. Check out the
 ## Planned (in no particular order):
 - MAJOR code refactor (I know its ugly and long messy)
 - Disallow identical class members
-- Support for custom dartdoc comments
 - Persist user settings
 - Generate custom toString()
 - Set default data for class members

@@ -1,4 +1,7 @@
-# 0.0.# (4/16/2019)
+# 0.0.4 (4/16/2019)
+- Support for dartdoc comments!
+
+# 0.0.3 (4/16/2019)
 - Support for toggling named parameters
 
 # 0.0.2 (4/16/2019)

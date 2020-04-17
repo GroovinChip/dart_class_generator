@@ -27,7 +27,6 @@ import 'package:rxdart/rxdart.dart';
 //todo: recase
 //todo: annotations
 //todo: support factories
-//todo: adding dartdoc comments to classes and members
 //todo: add JSON Serializable stuff
 
 void main() {
@@ -78,6 +77,7 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
   DartClass _class;
 
   TextEditingController _classNameController;
+  TextEditingController _classDartdocController;
   TextEditingController _dataValueNameController = TextEditingController();
   TextEditingController _listDataTypeController = TextEditingController();
   TextEditingController _mapKeyDataTypeController = TextEditingController();
@@ -90,6 +90,7 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
   void initState() {
     super.initState();
     _classNameController = TextEditingController(text: 'MyClass');
+    _classDartdocController = TextEditingController(text: '///');
     _class = DartClass(
       name: _classNameController.text,
       isConst: _withConstConstructor,
@@ -112,7 +113,8 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
           } else {
             _classCreatorWidth = kTabletClassCreatorWidth;
             _isTablet = true;
-          };
+          }
+          ;
           return Scaffold(
             appBar: AppBar(
               /*leading: Tooltip(
@@ -185,6 +187,37 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                                   tooltip: 'Clear',
                                   onPressed: () {
                                     _classNameController.clear();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: _classDartdocController,
+                              onChanged: (dDoc) {
+                                setState(() {
+                                  _class.dartdoc = dDoc;
+                                });
+                              },
+                              textCapitalization: TextCapitalization.words,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                labelText: 'Class dartdoc',
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.clear),
+                                  tooltip: 'Clear',
+                                  onPressed: () {
+                                    setState(() {
+                                      _classDartdocController.clear();
+                                      _classDartdocController
+                                        ..value = TextEditingValue(text: '///')
+                                        ..selection =
+                                            TextSelection.collapsed(offset: 3);
+                                    });
                                   },
                                 ),
                               ),
@@ -433,6 +466,10 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                                   icon: Icon(Icons.more_vert),
                                   itemBuilder: (_) => [
                                     PopupMenuItem(
+                                      child: Text('Add dartdoc'),
+                                      value: 'Dartdoc',
+                                    ),
+                                    PopupMenuItem(
                                       child: Text('Make required'),
                                       value: 'Required',
                                     ),
@@ -447,6 +484,95 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                                   ],
                                   onSelected: (value) {
                                     switch (value) {
+                                      case 'Dartdoc':
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            TextEditingController
+                                                _memberDartdocController =
+                                                TextEditingController(
+                                                    text: '///');
+                                            return SimpleDialog(
+                                              title: Text(
+                                                  'Add dartdoc to ${_class.members[index].type} ${_class.members[index].name}'),
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 16,
+                                                          right: 16,
+                                                          top: 8,
+                                                          bottom: 8),
+                                                  child: TextField(
+                                                    controller:
+                                                        _memberDartdocController,
+                                                    onChanged: (dDoc) {
+                                                      setState(() {
+                                                        _class.members[index]
+                                                            .dartdoc = dDoc;
+                                                      });
+                                                    },
+                                                    textCapitalization:
+                                                        TextCapitalization
+                                                            .words,
+                                                    decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                      ),
+                                                      labelText:
+                                                          'Class dartdoc',
+                                                      suffixIcon: IconButton(
+                                                        icon: Icon(Icons.clear),
+                                                        tooltip: 'Clear',
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            _memberDartdocController
+                                                                .clear();
+                                                            _memberDartdocController
+                                                              ..value =
+                                                                  TextEditingValue(
+                                                                      text:
+                                                                          '///')
+                                                              ..selection =
+                                                                  TextSelection
+                                                                      .collapsed(
+                                                                          offset:
+                                                                              3);
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    FlatButton(
+                                                      textColor:
+                                                          Theme.of(context)
+                                                              .accentColor,
+                                                      child: Text('Add'),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          _class.members[index]
+                                                                  .dartdoc =
+                                                              _memberDartdocController
+                                                                  .text;
+                                                        });
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        break;
                                       case 'Required':
                                         if (member.isRequired == false) {
                                           setState(() {
@@ -493,8 +619,12 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                     child: Card(
                       elevation: !_isTablet ? 6 : 0,
                       child: Container(
-                        height: !_isTablet ? constraints.maxHeight / 1.5 : constraints.maxHeight,
-                        width: !_isTablet ? constraints.maxWidth / 2 : constraints.maxWidth,
+                        height: !_isTablet
+                            ? constraints.maxHeight / 1.5
+                            : constraints.maxHeight,
+                        width: !_isTablet
+                            ? constraints.maxWidth / 2
+                            : constraints.maxWidth,
                         child: StreamBuilder(
                           stream: CombineLatestStream.combine2(
                             _settingsBloc.lineNumbersStream,
@@ -568,6 +698,37 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                                 tooltip: 'Clear',
                                 onPressed: () {
                                   _classNameController.clear();
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            controller: _classDartdocController,
+                            onChanged: (dDoc) {
+                              setState(() {
+                                _class.dartdoc = dDoc;
+                              });
+                            },
+                            textCapitalization: TextCapitalization.words,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              labelText: 'Class dartdoc',
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.clear),
+                                tooltip: 'Clear',
+                                onPressed: () {
+                                  setState(() {
+                                    _classDartdocController.clear();
+                                    _classDartdocController
+                                      ..value = TextEditingValue(text: '///')
+                                      ..selection =
+                                          TextSelection.collapsed(offset: 3);
+                                  });
                                 },
                               ),
                             ),
@@ -806,6 +967,10 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                             icon: Icon(Icons.more_vert),
                             itemBuilder: (_) => [
                               PopupMenuItem(
+                                child: Text('Add dartdoc'),
+                                value: 'Dartdoc',
+                              ),
+                              PopupMenuItem(
                                 child: Text('Make required'),
                                 value: 'Required',
                               ),
@@ -820,6 +985,86 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                             ],
                             onSelected: (value) {
                               switch (value) {
+                                case 'Dartdoc':
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      TextEditingController
+                                          _memberDartdocController =
+                                          TextEditingController(text: '///');
+                                      return SimpleDialog(
+                                        title: Text(
+                                            'Add dartdoc to ${_class.members[index].type} ${_class.members[index].name}'),
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 16,
+                                                right: 16,
+                                                top: 8,
+                                                bottom: 8),
+                                            child: TextField(
+                                              controller:
+                                                  _memberDartdocController,
+                                              onChanged: (dDoc) {
+                                                setState(() {
+                                                  _class.members[index]
+                                                      .dartdoc = dDoc;
+                                                });
+                                              },
+                                              textCapitalization:
+                                                  TextCapitalization.words,
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                labelText: 'Class dartdoc',
+                                                suffixIcon: IconButton(
+                                                  icon: Icon(Icons.clear),
+                                                  tooltip: 'Clear',
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      _memberDartdocController
+                                                          .clear();
+                                                      _memberDartdocController
+                                                        ..value =
+                                                            TextEditingValue(
+                                                                text: '///')
+                                                        ..selection =
+                                                            TextSelection
+                                                                .collapsed(
+                                                                    offset: 3);
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              FlatButton(
+                                                textColor: Theme.of(context)
+                                                    .accentColor,
+                                                child: Text('Add'),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _class.members[index]
+                                                            .dartdoc =
+                                                        _memberDartdocController
+                                                            .text;
+                                                  });
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  break;
                                 case 'Required':
                                   if (member.isRequired == false) {
                                     setState(() {

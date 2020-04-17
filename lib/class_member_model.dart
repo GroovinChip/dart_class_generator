@@ -21,8 +21,6 @@ class ClassMember {
 
   String param() {
     final buffer = StringBuffer();
-    final _dartdoc = dartdoc ?? '///todo: write documentation for $name';
-    buffer.writeln(_dartdoc);
     if (isRequired) {
       buffer.write('@required ');
     }
@@ -46,7 +44,9 @@ class ClassMember {
   }
 
   String field() {
+    final _dartdoc = dartdoc ?? '///todo: write documentation for member $name';
     final sb = StringBuffer();
+    sb.writeln(_dartdoc);
     if (isFinal) {
       sb.write('final ');
     }
