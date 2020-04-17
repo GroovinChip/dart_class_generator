@@ -200,7 +200,7 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                             title: Text('Use Const Constructor'),
                             activeColor: Theme.of(context).accentColor,
                           ),
-                          /*SwitchListTile(
+                          SwitchListTile(
                             value: _class.hasNamedParameters,
                             onChanged: _class.members.isEmpty
                                 ? null
@@ -211,7 +211,7 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                                   },
                             title: Text('Use Named Parameters'),
                             activeColor: Theme.of(context).accentColor,
-                          ),*/
+                          ),
                           SwitchListTile(
                             value: _class.allMembersFinal,
                             title: Text('Use Final Members'),
@@ -583,7 +583,7 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                           title: Text('Use Const Constructor'),
                           activeColor: Theme.of(context).accentColor,
                         ),
-                        /*SwitchListTile(
+                        SwitchListTile(
                           value: _class.hasNamedParameters,
                           onChanged: _class.members.isEmpty
                               ? null
@@ -594,7 +594,7 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                                 },
                           title: Text('Use Named Parameters'),
                           activeColor: Theme.of(context).accentColor,
-                        ),*/
+                        ),
                         SwitchListTile(
                           value: _class.allMembersFinal,
                           title: Text('Use Final Members'),
