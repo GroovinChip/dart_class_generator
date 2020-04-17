@@ -61,4 +61,9 @@ class ClassMember {
     sb.write('$name;');
     return sb.toString();
   }
+
+  @override
+  String toString() {
+    return '$type $name';
+  }
 }
