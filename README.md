@@ -41,6 +41,5 @@ A Flutter that can generate Dart classes. Runs on Android and Web. Check out the
 - Info/help/about section in-app
 
 ## Bugs
-- Copying code to the clipboard does not work on Windows
 - `Divider` widgets do not show on web
 - Backspacing the class name textfield until no characters are left crashes the code viewer

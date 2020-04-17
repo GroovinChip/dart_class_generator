@@ -16,18 +16,21 @@ import 'package:rxdart/rxdart.dart';
 //todo: MAJOR code cleanup
 //todo: bug - backspacing class name until field is empty crashes code viewer. Oddly, clearing the field via the button does not.
 //todo: bug - dividers do not show on web
-//todo: bug - code copy does not work on desktop
 //todo: disallow duplicate members
+//todo: settings - allow user to select codeview theme
 //todo: functions?
 //todo: export code screenshot
+//todo: export to gist, dartpad, codepen
 //todo: default values for members
 //todo: generate instantiated classes
-//todo: class templates
+//todo: create, save, load class templates
+//todo: save as draft
 //todo: add toString() (in progress)
 //todo: recase
 //todo: annotations
 //todo: support factories
 //todo: add JSON Serializable stuff
+//todo: dynamic font selection
 
 void main() {
   runApp(MyApp());
@@ -132,7 +135,7 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                 FlatButton.icon(
                   icon: Icon(Icons.content_copy),
                   label: Text('Copy Code'),
-                  onPressed: () {
+                  onPressed: () async {
                     ///seems to not work on windows :(
                     ///todo: investigate
                     Clipboard.setData(
@@ -626,25 +629,29 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                             ? constraints.maxWidth / 2
                             : constraints.maxWidth,
                         child: StreamBuilder(
-                          stream: CombineLatestStream.combine2(
+                          stream: CombineLatestStream.combine3(
                             _settingsBloc.lineNumbersStream,
                             _settingsBloc.codeFontSizeStream,
-                            (bool lineNumsOn, double fontSize) => [
+                            _settingsBloc.codeEditingStream,
+                                (bool lineNumsOn, double fontSize, bool codeEditingOn) => [
                               lineNumsOn,
                               fontSize,
+                              codeEditingOn,
                             ],
                           ),
                           initialData: [
                             _settingsBloc.lineNumbersStream.value,
-                            _settingsBloc.codeFontSizeStream.value
+                            _settingsBloc.codeFontSizeStream.value,
+                            _settingsBloc.codeEditingStream.value,
                           ],
                           builder: (context, snapshot) {
                             bool _lineNumsOn = snapshot.data[0];
                             double _fontSize = snapshot.data[1];
+                            bool _codeEditingOn = snapshot.data[2];
                             return CodeView(
                               data: _class.toString(),
                               ext: 'dart',
-                              edit: false,
+                              edit: _codeEditingOn,
                               fontSize: _fontSize,
                               showLineNumbers: _lineNumsOn,
                             );
@@ -1113,6 +1120,8 @@ class _GeneratorHomePageState extends State<GeneratorHomePage> {
                 MaterialPageRoute(
                   builder: (context) => MobileCodeView(
                     dartClass: _class,
+                    data: _class.toString(),
+                    ext: 'dart',
                   ),
                 ),
               ),
