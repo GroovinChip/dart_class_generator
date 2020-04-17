@@ -2,7 +2,6 @@ import 'package:dart_style/dart_style.dart';
 import 'package:flutter/material.dart';
 import 'class_member_model.dart';
 
-//todo fix named parameters output
 //todo: fix line formatting
 
 class DartClass {
@@ -42,7 +41,7 @@ class DartClass {
       buffer.write('<$generic>');
     }
     buffer.write(' (');
-    if (_members.isNotEmpty) {
+    if (_members.isNotEmpty && hasNamedParameters) {
       buffer.write('{');
     }
     for (final member in _members) {
@@ -72,7 +71,7 @@ class DartClass {
         }
       }
     } else {
-      if (_members.isNotEmpty) {
+      if (_members.isNotEmpty && hasNamedParameters) {
         buffer.write('}');
       }
       buffer.write(');');
