@@ -2,7 +2,6 @@
 - New toolbar above code previewer for tablet and desktop UI:
   - The Add Class Member button has been moved here. Class members will now show in the Class Creator Sidebar in an expansion tile.
   - Copy Code and Editor Settings buttons have been moved here from the AppBar. This leaves room for broader actions on the AppBar.
-- Refactor Desktop, Tablet, and Mobile layouts into their own widgets.
 
 # 0.0.6 (4/17/2019)
 - Fixes [#5](https://github.com/GroovinChip/dart_class_generator/issues/5). Thanks to [Tim Sneath](https://twitter.com/timsneath?s=20) and [dartdie](https://github.com/darthdie) for bringing this to my attention
