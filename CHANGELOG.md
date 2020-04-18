@@ -1,3 +1,6 @@
+# 0.0.8 (4/17/2019)
+- Add support for class members with custom data types
+
 # 0.0.7 (4/17/2019)
 - New toolbar above code previewer for tablet and desktop UI:
   - The Add Class Member button has been moved here. Class members will now show in the Class Creator Sidebar in an expansion tile.

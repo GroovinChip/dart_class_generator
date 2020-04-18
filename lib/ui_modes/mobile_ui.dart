@@ -31,7 +31,7 @@ class _MobileUIState extends State<MobileUI> {
   TextEditingController _listDataTypeController = TextEditingController();
   TextEditingController _mapKeyDataTypeController = TextEditingController();
   TextEditingController _mapValueDataTypeController = TextEditingController();
-  TextEditingController _dateTimeController = TextEditingController();
+  TextEditingController _customTypeController = TextEditingController();
 
   @override
   void initState() {
@@ -204,6 +204,10 @@ class _MobileUIState extends State<MobileUI> {
                       child: Text('DateTime'),
                       value: 'DateTime',
                     ),
+                    PopupMenuItem(
+                      child: Text('Custom'),
+                      value: 'custom type',
+                    ),
                   ],
                   onSelected: (value) => showDialog(
                     context: context,
@@ -252,6 +256,20 @@ class _MobileUIState extends State<MobileUI> {
                               ),
                             ),
                           ),
+                        if (value == 'custom type')
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              autofocus: true,
+                              controller: _customTypeController,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                labelText: 'Data type',
+                              ),
+                            ),
+                          ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextField(
@@ -293,14 +311,14 @@ class _MobileUIState extends State<MobileUI> {
                                       ),
                                     );
                                   });
-                                } else if (value == 'Map') {
+                                } else if (value == 'custom type') {
                                   setState(() {
                                     _class.members.add(
                                       ClassMember(
                                         name:
                                         '${_dataValueNameController.text}',
                                         type:
-                                        '$value<${_mapKeyDataTypeController.text}, ${_mapValueDataTypeController.text}>',
+                                        '${_customTypeController.text}',
                                       ),
                                     );
                                   });
@@ -319,6 +337,7 @@ class _MobileUIState extends State<MobileUI> {
                                 _listDataTypeController.text = '';
                                 _mapKeyDataTypeController.text = '';
                                 _mapValueDataTypeController.text = '';
+                                _customTypeController.text = '';
                                 Navigator.pop(context);
                               },
                             ),
