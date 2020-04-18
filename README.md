@@ -28,7 +28,7 @@ A Flutter that can generate Dart classes. Runs on Android, Windows and Web. Chec
 - Set the preferred font size for the code preview
 
 ## Planned (in no particular order):
-- MAJOR code refactor (I know its ugly and long messy)
+- MAJOR code refactor (I know its ugly and long and messy)
 - Disallow identical class members
 - Persist user settings
 - Generate custom toString()
@@ -48,3 +48,4 @@ A Flutter that can generate Dart classes. Runs on Android, Windows and Web. Chec
 - Editable code view does not support selecting and copying code
 - Editable code view does not accurately reflect the cursor location on web/windows
 - Editable code view font size is not configurable
+- AppBar color on web seems to be darker than it should be

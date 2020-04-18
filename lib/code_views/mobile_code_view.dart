@@ -1,6 +1,6 @@
-import 'package:dartclassgenerator/class_model.dart';
-import 'package:dartclassgenerator/settings_bloc.dart';
-import 'package:dartclassgenerator/settings_dialog.dart';
+import 'package:dartclassgenerator/editor_settings/editor_settings_bloc.dart';
+import 'package:dartclassgenerator/editor_settings/editor_settings_dialog.dart';
+import 'package:dartclassgenerator/models/class_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
@@ -61,7 +61,7 @@ class _MobileCodeViewState extends State<MobileCodeView> {
 
   @override
   Widget build(BuildContext context) {
-    final _settingsBloc = Provider.of<SettingsBloc>(context);
+    final _settingsBloc = Provider.of<EditorSettingsBloc>(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
@@ -105,7 +105,7 @@ class _MobileCodeViewState extends State<MobileCodeView> {
                 case 'Settings':
                   showDialog(
                     context: context,
-                    builder: (_) => SettingsDialog(),
+                    builder: (_) => EditorSettingsDialog(),
                   );
                   break;
                 default:

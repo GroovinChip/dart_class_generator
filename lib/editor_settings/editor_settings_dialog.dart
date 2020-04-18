@@ -1,24 +1,23 @@
-import 'package:dartclassgenerator/settings_bloc.dart';
+import 'package:dartclassgenerator/editor_settings/editor_settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:groovin_widgets/groovin_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-//todo: setting for default DateTime format
-class SettingsDialog extends StatefulWidget {
-  SettingsDialog({Key key}) : super(key: key);
+// todo: add code zoom setting
+class EditorSettingsDialog extends StatefulWidget {
+  EditorSettingsDialog({Key key}) : super(key: key);
 
   @override
-  _SettingsDialogState createState() => _SettingsDialogState();
+  _EditorSettingsDialogState createState() => _EditorSettingsDialogState();
 }
 
-class _SettingsDialogState extends State<SettingsDialog> {
+class _EditorSettingsDialogState extends State<EditorSettingsDialog> {
   TextEditingController _fontSizeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final _settingsBloc = Provider.of<SettingsBloc>(context);
+    final _settingsBloc = Provider.of<EditorSettingsBloc>(context);
     return StreamBuilder(
       stream: CombineLatestStream.combine3(
         _settingsBloc.lineNumbersStream,
@@ -40,7 +39,8 @@ class _SettingsDialogState extends State<SettingsDialog> {
         double _fontSize = snapshot.data[1];
         bool _codeEditingOn = snapshot.data[2];
         return SimpleDialog(
-          title: Text('Settings'),
+          title: Text('Editor Settings'),
+          titlePadding: EdgeInsets.fromLTRB(16, 24, 16, 0),
           children: [
             SwitchListTile(
               value: _lineNumsOn,
