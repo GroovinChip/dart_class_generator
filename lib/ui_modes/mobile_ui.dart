@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:groovin_widgets/groovin_expansion_tile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-//todo: info button in appbar actions
 class MobileUI extends StatefulWidget {
   MobileUI({Key key}) : super(key: key);
 

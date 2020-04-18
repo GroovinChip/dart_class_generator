@@ -13,7 +13,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-//todo: info button in appbar actions
 class DesktopUI extends StatefulWidget {
   DesktopUI({
     Key key,
