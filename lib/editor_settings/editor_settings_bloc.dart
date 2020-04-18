@@ -1,7 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 
 /// this is runtime only for now
-class SettingsBloc {
+class EditorSettingsBloc {
   final _lineNumbersController = BehaviorSubject<bool>.seeded(true);
   final _codeFontSizeController = BehaviorSubject<double>.seeded(24);
   final _codeEditingController = BehaviorSubject<bool>.seeded(false);
