@@ -5,6 +5,7 @@ import 'package:dartclassgenerator/editor_settings/editor_settings_dialog.dart';
 import 'package:dartclassgenerator/models/class_member_model.dart';
 import 'package:dartclassgenerator/models/class_model.dart';
 import 'package:dartclassgenerator/strings.dart';
+import 'package:dartclassgenerator/widgets/app_bar_overflow_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:groovin_widgets/groovin_expansion_tile.dart';
@@ -30,8 +31,6 @@ class _TabletUIState extends State<TabletUI> {
   String classDartDoc;
   bool _withConstConstructor = false;
   bool _withNamedParameters = false;
-  bool _useFinalMembers = false;
-  bool _withToString = false;
 
   DartClass _class;
 
@@ -72,6 +71,9 @@ class _TabletUIState extends State<TabletUI> {
               ),*/
         centerTitle: true,
         title: Text(appTitle),
+        actions: [
+          AppBarOverflowMenu(),
+        ],
       ),
       body: Row(
         children: [

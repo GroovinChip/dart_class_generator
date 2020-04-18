@@ -2,6 +2,7 @@ import 'package:dartclassgenerator/code_views/mobile_code_view.dart';
 import 'package:dartclassgenerator/models/class_member_model.dart';
 import 'package:dartclassgenerator/models/class_model.dart';
 import 'package:dartclassgenerator/strings.dart';
+import 'package:dartclassgenerator/widgets/app_bar_overflow_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:groovin_widgets/groovin_expansion_tile.dart';
@@ -20,8 +21,6 @@ class _MobileUIState extends State<MobileUI> {
   String classDartDoc;
   bool _withConstConstructor = false;
   bool _withNamedParameters = false;
-  bool _useFinalMembers = false;
-  bool _withToString = false;
 
   DartClass _class;
 
@@ -51,7 +50,9 @@ class _MobileUIState extends State<MobileUI> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle),
-        actions: [],
+        actions: [
+          AppBarOverflowMenu(),
+        ],
       ),
       body: CustomScrollView(
         slivers: [
@@ -169,10 +170,17 @@ class _MobileUIState extends State<MobileUI> {
               ListTile(
                 title: Text('Class Members'),
                 trailing: PopupMenuButton(
-                  child: FlatButton.icon(
-                    disabledTextColor: Colors.white,
-                    icon: Icon(Icons.add),
-                    label: Text('Add'),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 12, right: 16, top: 8, bottom: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add),
+                        SizedBox(width: 8),
+                        Text('Add Class Member'),
+                      ],
+                    ),
                   ),
                   tooltip: 'Add Attribute',
                   itemBuilder: (_) => [

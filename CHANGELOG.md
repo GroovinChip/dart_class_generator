@@ -1,3 +1,6 @@
+# 0.0.9 (4/18/2019)
+- AppBar overflow menu with source code and donate link
+
 # 0.0.8 (4/17/2019)
 - Add support for class members with custom data types
 

@@ -8,8 +8,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'code_view.dart';
-
 class MobileCodeView extends StatefulWidget {
   MobileCodeView({
     Key key,

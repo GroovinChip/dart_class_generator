@@ -54,3 +54,4 @@ A Flutter that can generate Dart classes. Runs on Android, Windows and Web. Chec
 - Editable code view does not accurately reflect the cursor location on web/windows
 - Editable code view font size is not configurable
 - AppBar color on web seems to be darker than it should be
+- Editable code view is broken for Windows
