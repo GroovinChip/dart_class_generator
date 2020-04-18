@@ -5,6 +5,10 @@ A Flutter that can generate Dart classes. Runs on Android, Windows and Web. Chec
 ### Notes:
 - Plans for supported platforms include iOS and macOS.
 - Release section will contain releases for supported platforms at the time of release.
+- To run the Windows app:
+  1. Download the zip file from the latest release
+  2. Extract the zip
+  3. Run the exe from inside the folder OR right-click the exe and create a shortcut to place anywhere you want
 
 ## Current Features:
 - Create a Dart dynamically based on user input:
