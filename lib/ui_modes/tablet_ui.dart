@@ -41,7 +41,7 @@ class _TabletUIState extends State<TabletUI> {
   TextEditingController _listDataTypeController = TextEditingController();
   TextEditingController _mapKeyDataTypeController = TextEditingController();
   TextEditingController _mapValueDataTypeController = TextEditingController();
-  TextEditingController _dateTimeController = TextEditingController();
+  TextEditingController _customTypeController = TextEditingController();
 
   @override
   void initState() {
@@ -409,6 +409,10 @@ class _TabletUIState extends State<TabletUI> {
                                 child: Text('DateTime'),
                                 value: 'DateTime',
                               ),
+                              PopupMenuItem(
+                                child: Text('Custom'),
+                                value: 'custom type',
+                              ),
                             ],
                             onSelected: (value) => showDialog(
                               context: context,
@@ -454,6 +458,20 @@ class _TabletUIState extends State<TabletUI> {
                                             borderRadius: BorderRadius.circular(12),
                                           ),
                                           labelText: 'Value type',
+                                        ),
+                                      ),
+                                    ),
+                                  if (value == 'custom type')
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextField(
+                                        autofocus: true,
+                                        controller: _customTypeController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          labelText: 'Data type',
                                         ),
                                       ),
                                     ),
@@ -509,6 +527,17 @@ class _TabletUIState extends State<TabletUI> {
                                                 ),
                                               );
                                             });
+                                          } else if (value == 'custom type') {
+                                            setState(() {
+                                              _class.members.add(
+                                                ClassMember(
+                                                  name:
+                                                  '${_dataValueNameController.text}',
+                                                  type:
+                                                  '${_customTypeController.text}',
+                                                ),
+                                              );
+                                            });
                                           } else {
                                             setState(() {
                                               _class.members.add(
@@ -524,6 +553,7 @@ class _TabletUIState extends State<TabletUI> {
                                           _listDataTypeController.text = '';
                                           _mapKeyDataTypeController.text = '';
                                           _mapValueDataTypeController.text = '';
+                                          _customTypeController.text = '';
                                           Navigator.pop(context);
                                         },
                                       ),

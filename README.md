@@ -22,6 +22,7 @@ A Flutter that can generate Dart classes. Runs on Android, Windows and Web. Chec
   - `List<T>`
   - `Map<T, T>`
   - `DateTime`
+  - Any custom type
 - View the dynamically generated code and copy it to the clipboard. On Web/Desktop/Tablet you can create the class and see the generated code on the same screen. On mobile you will navigate to a separate view to see and copy the code.
 - Toggle line numbers on or off for the code preview
 - Toggle the code view from read-only to editable (note: the editable code view does not currently support copying, nor will the cursor accurately reflect where you have clicked. This will hopefully be resolved soon.)
