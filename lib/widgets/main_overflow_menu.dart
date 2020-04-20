@@ -1,6 +1,6 @@
 import 'package:dartclassgenerator/models/class_model.dart';
-import 'file:///C:/Users/ReubenT/FlutterProjects/experiments/dart_class_generator/lib/utilities/file_storage/dart_file_storage_web_stub.dart' if (dart.library.html) 'package:dartclassgenerator/utilities/dart_file_storage_web.dart';
-import 'file:///C:/Users/ReubenT/FlutterProjects/experiments/dart_class_generator/lib/utilities/file_storage/dart_file_storage.dart';
+import 'package:dartclassgenerator/utilities/file_storage/dart_file_storage.dart';
+import 'package:dartclassgenerator/utilities/file_storage/dart_file_storage_web_stub.dart' if (dart.library.html) 'package:dartclassgenerator/utilities/file_storage/dart_file_storage_web.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
