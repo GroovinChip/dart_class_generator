@@ -41,12 +41,12 @@ class DartFileStorage {
   /// Save dart file appropriately per platform.
   /// `async` is for the mobile implementations.
   Future<void> saveDartFile(String dartCode) async {
-    if (Platform.isWindows) {
+    if (Platform.isWindows || Platform.isMacOS) {
       showSavePanel(suggestedFileName: '$dartClassName.dart').then((result) {
         if (!result.canceled) {
-          final windowsPath = result.paths[0];
-          File windowsFile = File('$windowsPath');
-          windowsFile.writeAsString('$dartCode');
+          final desktopPath = result.paths[0];
+          File desktopFile = File('$desktopPath');
+          desktopFile.writeAsString('$dartCode');
         }
       });
     } else if (Platform.isAndroid) {

@@ -22,12 +22,14 @@ dependencies:
   intent: ^1.1.0
   url_launcher: ^5.4.2
   url_launcher_web: ^0.1.1+1
+  url_launcher_macos: ^0.0.1+4
   url_launcher_fde:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/url_launcher_fde
   path_provider_ex: ^1.0.1
   path_provider: ^1.6.5
+  path_provider_macos: ^0.0.4
   path_provider_fde:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
