@@ -20,7 +20,7 @@
 //todo: readonly code view font
 //todo: persist user settings
 //todo: show changelog on update?
-//todo: prompt user to download update on Windows, Android (?)
+//todo: prompt user to download update on Windows, macOS, Android (?)
 //todo: mixin support
 //todo: integrate json2dart?
 //todo: named constructors
