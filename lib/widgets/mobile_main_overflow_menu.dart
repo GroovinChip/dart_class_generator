@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AppBarOverflowMenu extends StatelessWidget {
+/// AppBar overflow menu for mobile
+class MobileMainOverflowMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       icon: Icon(Icons.more_vert),
       tooltip: 'More',
-      itemBuilder: (_) => [
+      itemBuilder: (_) => <PopupMenuEntry>[
         PopupMenuItem(
           child: Row(
             children: [

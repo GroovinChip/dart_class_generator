@@ -1,10 +1,17 @@
+import 'dart:io';
 import 'package:dartclassgenerator/editor_settings/editor_settings_bloc.dart';
 import 'package:dartclassgenerator/editor_settings/editor_settings_dialog.dart';
 import 'package:dartclassgenerator/models/class_model.dart';
-import 'package:flutter/material.dart';
+import 'package:dartclassgenerator/utilities/file_storage/dart_file_storage.dart';
+import 'package:dartclassgenerator/utilities/permission_checker.dart';
+import 'package:flutter/material.dart' hide Intent, Action;
 import 'package:flutter/services.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:intent/action.dart';
+import 'package:intent/intent.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:path_provider_ex/path_provider_ex.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -28,11 +35,31 @@ class MobileCodeView extends StatefulWidget {
 
 class _MobileCodeViewState extends State<MobileCodeView> {
   final _controller = CodeEditingController();
+  List<StorageInfo> _storageInfo = [];
+  DartFileStorage dartFileStorage;
+  PermissionChecker permissionChecker = PermissionChecker();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// Get mobile storage information
+  Future<void> _getStorageInfo() async {
+    List<StorageInfo> storageInfo;
+    try {
+      storageInfo = await PathProviderEx.getStorageInfo();
+    } on PlatformException {}
+
+    if (!mounted) return;
+
+    setState(() {
+      _storageInfo = storageInfo;
+    });
+  }
+
   @override
   void initState() {
+    super.initState();
+    _getStorageInfo();
     _controller.text = widget.data;
     _controller.addListener(_onChanged);
-    super.initState();
   }
 
   void _onChanged() {
@@ -57,17 +84,37 @@ class _MobileCodeViewState extends State<MobileCodeView> {
     super.dispose();
   }
 
+  /// Save dart file to device storage using utility
+  void _initStorage() {
+    dartFileStorage = DartFileStorage(
+      dartClassName: widget.dartClass.name,
+      storageInfo: _storageInfo,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final _settingsBloc = Provider.of<EditorSettingsBloc>(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('${widget.dartClass.name} Code'),
         actions: [
           PopupMenuButton(
             tooltip: 'Options',
-            itemBuilder: (_) => [
+            itemBuilder: (_) => <PopupMenuEntry>[
+              PopupMenuItem(
+                child: Row(
+                  children: [
+                    Icon(MdiIcons.download),
+                    SizedBox(width: 8),
+                    Text('Download dart file'),
+                  ],
+                ),
+                value: 'DownloadDartFile',
+              ),
+              PopupMenuDivider(),
               PopupMenuItem(
                 child: Row(
                   children: [
@@ -91,6 +138,43 @@ class _MobileCodeViewState extends State<MobileCodeView> {
             ],
             onSelected: (value) {
               switch (value) {
+                case 'DownloadDartFile':
+                  if (Platform.isAndroid) {
+                    permissionChecker
+                        .checkStoragePermission()
+                        .then((PermissionStatus storagePermission) {
+                      if (storagePermission.isGranted) {
+                        _initStorage();
+                        dartFileStorage
+                            .saveDartFile(widget.dartClass.toString())
+                            .then((value) {
+                          _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '${widget.dartClass.name}.dart saved to ${dartFileStorage.androidFilePath}',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              duration: Duration(seconds: 3),
+                              action: SnackBarAction(
+                                label: 'Open',
+                                textColor: Colors.white,
+                                onPressed: () => Intent()..setData(Uri.parse(dartFileStorage.androidFilePath))..putExtra('org.openintents.extra.ABSOLUTE_PATH', dartFileStorage.androidFilePath)..setType('resource/folder')..setAction(Action.ACTION_VIEW)..startActivity(),
+                              ),
+                            ),
+                          );
+                        });
+                      } else if (storagePermission.isDenied) {
+                        openAppSettings();
+                      }
+                    });
+                  } else if (Platform.isIOS) {
+                    //todo: implement iOS behavior
+                  } else if (Platform.isWindows) {
+                    _initStorage();
+                    dartFileStorage.saveDartFile(widget.dartClass.toString());
+                  }
+                  break;
                 case 'CopyCode':
                   Clipboard.setData(
                     ClipboardData(
