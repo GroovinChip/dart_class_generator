@@ -9,6 +9,7 @@ A Flutter that can generate Dart classes. Runs on Android, Windows and Web. Chec
   1. Download the zip file from the latest release
   2. Extract the zip
   3. Run the exe from inside the `runner` folder OR right-click the exe and create a shortcut to place anywhere you want
+- If you find a bug or if you have a specific feature that you'd like to see implemented please file an issue. Thanks!
 
 ## Current Features:
 - Create a Dart dynamically based on user input:
