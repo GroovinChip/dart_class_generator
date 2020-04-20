@@ -1,7 +1,7 @@
 name: dartclassgenerator
 description: A Flutter that can generate Dart classes. Runs on Android and Web.
 publish_to: 'none'
-version: 0.0.9
+version: 0.0.10
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -17,17 +17,30 @@ dependencies:
   material_design_icons_flutter: ^4.0.5145
   provider: ^4.0.5
   rxdart: ^0.24.0
+  state_persistence: ^0.0.7
+  permission_handler: ^5.0.0+hotfix.3
+  intent: ^1.1.0
   url_launcher: ^5.4.2
   url_launcher_web: ^0.1.1+1
   url_launcher_fde:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/flutter_plugins/url_launcher_fde
+  path_provider_ex: ^1.0.1
+  path_provider: ^1.6.5
+  path_provider_fde:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding.git
+      path: plugins/flutter_plugins/path_provider_fde
   flutter_syntax_view:
     git: https://github.com/rodydavis/flutter_syntax_view
     #path: ../../flutter_syntax_view
   syntax_highlighter:
     git: https://github.com/rodydavis/syntax_highlighter
+  file_chooser:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding.git
+      path: plugins/file_chooser
 
 dev_dependencies:
   flutter_test:

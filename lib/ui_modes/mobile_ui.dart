@@ -2,7 +2,7 @@ import 'package:dartclassgenerator/code_views/mobile_code_view.dart';
 import 'package:dartclassgenerator/models/class_member_model.dart';
 import 'package:dartclassgenerator/models/class_model.dart';
 import 'package:dartclassgenerator/strings.dart';
-import 'package:dartclassgenerator/widgets/app_bar_overflow_menu.dart';
+import 'package:dartclassgenerator/widgets/mobile_main_overflow_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:groovin_widgets/groovin_expansion_tile.dart';
@@ -50,7 +50,7 @@ class _MobileUIState extends State<MobileUI> {
       appBar: AppBar(
         title: Text(appTitle),
         actions: [
-          AppBarOverflowMenu(),
+          MobileMainOverflowMenu()
         ],
       ),
       body: CustomScrollView(

@@ -1,3 +1,6 @@
+# 0.0.10 (4/19/2019)
+- Download your class as a .dart file! On Windows and Web, save it anywhere you want. On Android, a `DartClassGenerator` directory will be created in internal storage and you can find your code there.
+
 # 0.0.9 (4/18/2019)
 - AppBar overflow menu with source code and donate link
 
