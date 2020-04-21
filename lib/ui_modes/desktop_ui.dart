@@ -5,6 +5,7 @@ import 'package:dartclassgenerator/editor_settings/editor_settings_dialog.dart';
 import 'package:dartclassgenerator/models/class_member_model.dart';
 import 'package:dartclassgenerator/models/class_model.dart';
 import 'package:dartclassgenerator/strings.dart';
+import 'package:dartclassgenerator/widgets/popup_menu_lists.dart';
 import 'package:dartclassgenerator/widgets/main_overflow_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -87,36 +88,15 @@ class _DesktopUIState extends State<DesktopUI> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
-                        controller: _classNameController,
-                        onChanged: (name) {
-                          setState(() {
-                            _class.name = name;
-                          });
-                        },
-                        autofocus: true,
-                        textCapitalization: TextCapitalization.words,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          labelText: 'Class name',
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons.clear),
-                            tooltip: 'Clear',
-                            onPressed: () {
-                              _classNameController.clear();
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
                         controller: _classDartdocController,
                         onChanged: (dDoc) {
                           setState(() {
                             _class.dartdoc = dDoc;
+                          });
+                        },
+                        onEditingComplete: () {
+                          setState(() {
+                            _class.dartdoc = _classDartdocController.text;
                           });
                         },
                         textCapitalization: TextCapitalization.words,
@@ -133,8 +113,45 @@ class _DesktopUIState extends State<DesktopUI> {
                                 _classDartdocController.clear();
                                 _classDartdocController
                                   ..value = TextEditingValue(text: '///')
-                                  ..selection =
-                                      TextSelection.collapsed(offset: 3);
+                                  ..selection = TextSelection.collapsed(offset: 3);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: _classNameController,
+                        onChanged: (name) {
+                          if (name.isEmpty) {
+                            setState(() {
+                              _classNameController.clear();
+                              _classDartdocController..value = TextEditingValue(text: '');
+                              _class.name = null;
+                            });
+                          } else {
+                            setState(() {
+                              _class.name = name;
+                            });
+                          }
+                        },
+                        autofocus: true,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          labelText: 'Class name',
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.clear),
+                            tooltip: 'Clear',
+                            onPressed: () {
+                              setState(() {
+                                _classNameController.clear();
+                                _classDartdocController..value = TextEditingValue(text: '');
+                                _class.name = null;
                               });
                             },
                           ),
@@ -213,62 +230,33 @@ class _DesktopUIState extends State<DesktopUI> {
                             top: 0,
                             bottom: 0,
                           ),
-                          title: Text(
-                              '${_class.members[index].type} ${_class.members[index].name}'),
+                          title: Text('${_class.members[index].type} ${_class.members[index].name}'),
                           trailing: PopupMenuButton(
                             icon: Icon(Icons.more_vert),
-                            itemBuilder: (_) => [
-                              PopupMenuItem(
-                                child: Text('Add dartdoc'),
-                                value: 'Dartdoc',
-                              ),
-                              PopupMenuItem(
-                                child: Text('Make required'),
-                                value: 'Required',
-                              ),
-                              PopupMenuItem(
-                                child: Text('Make private'),
-                                value: 'Private',
-                              ),
-                              PopupMenuItem(
-                                child: Text('Remove member'),
-                                value: 'Remove',
-                              ),
-                            ],
+                            itemBuilder: (_) => classMemberOptions,
                             onSelected: (value) {
                               switch (value) {
                                 case 'Dartdoc':
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      TextEditingController
-                                          _memberDartdocController =
-                                          TextEditingController(text: '///');
+                                      TextEditingController _memberDartdocController = TextEditingController(text: '///');
                                       return SimpleDialog(
-                                        title: Text(
-                                            'Add dartdoc to ${_class.members[index].type} ${_class.members[index].name}'),
+                                        title: Text('Add dartdoc to ${_class.members[index].type} ${_class.members[index].name}'),
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 16,
-                                                right: 16,
-                                                top: 8,
-                                                bottom: 8),
+                                            padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
                                             child: TextField(
-                                              controller:
-                                                  _memberDartdocController,
+                                              controller: _memberDartdocController,
                                               onChanged: (dDoc) {
                                                 setState(() {
-                                                  _class.members[index]
-                                                      .dartdoc = dDoc;
+                                                  _class.members[index].dartdoc = dDoc;
                                                 });
                                               },
-                                              textCapitalization:
-                                                  TextCapitalization.words,
+                                              textCapitalization: TextCapitalization.words,
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                                 labelText: 'Class dartdoc',
                                                 suffixIcon: IconButton(
@@ -276,16 +264,10 @@ class _DesktopUIState extends State<DesktopUI> {
                                                   tooltip: 'Clear',
                                                   onPressed: () {
                                                     setState(() {
+                                                      _memberDartdocController.clear();
                                                       _memberDartdocController
-                                                          .clear();
-                                                      _memberDartdocController
-                                                        ..value =
-                                                            TextEditingValue(
-                                                                text: '///')
-                                                        ..selection =
-                                                            TextSelection
-                                                                .collapsed(
-                                                                    offset: 3);
+                                                        ..value = TextEditingValue(text: '///')
+                                                        ..selection = TextSelection.collapsed(offset: 3);
                                                     });
                                                   },
                                                 ),
@@ -293,19 +275,14 @@ class _DesktopUIState extends State<DesktopUI> {
                                             ),
                                           ),
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                            mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
                                               FlatButton(
-                                                textColor: Theme.of(context)
-                                                    .accentColor,
+                                                textColor: Theme.of(context).accentColor,
                                                 child: Text('Add'),
                                                 onPressed: () {
                                                   setState(() {
-                                                    _class.members[index]
-                                                            .dartdoc =
-                                                        _memberDartdocController
-                                                            .text;
+                                                    _class.members[index].dartdoc = _memberDartdocController.text;
                                                   });
                                                   Navigator.pop(context);
                                                 },
@@ -318,8 +295,7 @@ class _DesktopUIState extends State<DesktopUI> {
                                   );
                                   break;
                                 case 'Required':
-                                  if (_class.members[index].isRequired ==
-                                      false) {
+                                  if (_class.members[index].isRequired == false) {
                                     setState(() {
                                       _class.members[index].isRequired = true;
                                     });
@@ -330,8 +306,7 @@ class _DesktopUIState extends State<DesktopUI> {
                                   }
                                   break;
                                 case 'Private':
-                                  if (_class.members[index].isPrivate ==
-                                      false) {
+                                  if (_class.members[index].isPrivate == false) {
                                     setState(() {
                                       _class.members[index].isPrivate = true;
                                     });
@@ -366,8 +341,7 @@ class _DesktopUIState extends State<DesktopUI> {
                   children: [
                     PopupMenuButton(
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 12, right: 16, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(left: 12, right: 16, top: 8, bottom: 8),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -378,40 +352,7 @@ class _DesktopUIState extends State<DesktopUI> {
                         ),
                       ),
                       tooltip: 'Show options',
-                      itemBuilder: (_) => [
-                        PopupMenuItem(
-                          child: Text('String'),
-                          value: 'String',
-                        ),
-                        PopupMenuItem(
-                          child: Text('Integer'),
-                          value: 'int',
-                        ),
-                        PopupMenuItem(
-                          child: Text('Double'),
-                          value: 'double',
-                        ),
-                        PopupMenuItem(
-                          child: Text('Boolean'),
-                          value: 'bool',
-                        ),
-                        PopupMenuItem(
-                          child: Text('List'),
-                          value: 'List',
-                        ),
-                        PopupMenuItem(
-                          child: Text('Map'),
-                          value: 'Map',
-                        ),
-                        PopupMenuItem(
-                          child: Text('DateTime'),
-                          value: 'DateTime',
-                        ),
-                        PopupMenuItem(
-                          child: Text('Custom'),
-                          value: 'custom type',
-                        ),
-                      ],
+                      itemBuilder: (_) => classMemberTypes,
                       onSelected: (value) => showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -507,10 +448,8 @@ class _DesktopUIState extends State<DesktopUI> {
                                       setState(() {
                                         _class.members.add(
                                           ClassMember(
-                                            name:
-                                                '${_dataValueNameController.text}',
-                                            type:
-                                                '$value<${_listDataTypeController.text}>',
+                                            name: '${_dataValueNameController.text}',
+                                            type: '$value<${_listDataTypeController.text}>',
                                           ),
                                         );
                                       });
@@ -518,10 +457,8 @@ class _DesktopUIState extends State<DesktopUI> {
                                       setState(() {
                                         _class.members.add(
                                           ClassMember(
-                                            name:
-                                                '${_dataValueNameController.text}',
-                                            type:
-                                                '$value<${_mapKeyDataTypeController.text}, ${_mapValueDataTypeController.text}>',
+                                            name: '${_dataValueNameController.text}',
+                                            type: '$value<${_mapKeyDataTypeController.text}, ${_mapValueDataTypeController.text}>',
                                           ),
                                         );
                                       });
@@ -529,10 +466,8 @@ class _DesktopUIState extends State<DesktopUI> {
                                       setState(() {
                                         _class.members.add(
                                           ClassMember(
-                                            name:
-                                            '${_dataValueNameController.text}',
-                                            type:
-                                            '${_customTypeController.text}',
+                                            name: '${_dataValueNameController.text}',
+                                            type: '${_customTypeController.text}',
                                           ),
                                         );
                                       });
@@ -540,8 +475,7 @@ class _DesktopUIState extends State<DesktopUI> {
                                       setState(() {
                                         _class.members.add(
                                           ClassMember(
-                                            name:
-                                                '${_dataValueNameController.text}',
+                                            name: '${_dataValueNameController.text}',
                                             type: value,
                                           ),
                                         );
@@ -565,8 +499,7 @@ class _DesktopUIState extends State<DesktopUI> {
                     FlatButton.icon(
                       icon: Icon(MdiIcons.fileCode),
                       label: Text('Copy Code'),
-                      padding: const EdgeInsets.only(
-                          left: 24, right: 24, top: 20, bottom: 20),
+                      padding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 20),
                       onPressed: () {
                         Clipboard.setData(
                           ClipboardData(
@@ -580,8 +513,7 @@ class _DesktopUIState extends State<DesktopUI> {
                     FlatButton.icon(
                       icon: Icon(MdiIcons.codeTags),
                       label: Text('Editor Settings'),
-                      padding: const EdgeInsets.only(
-                          left: 24, right: 24, top: 20, bottom: 20),
+                      padding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 20),
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -603,13 +535,7 @@ class _DesktopUIState extends State<DesktopUI> {
                           _settingsBloc.lineNumbersStream,
                           _settingsBloc.codeFontSizeStream,
                           _settingsBloc.codeEditingStream,
-                          (bool lineNumsOn, double fontSize,
-                                  bool codeEditingOn) =>
-                              [
-                            lineNumsOn,
-                            fontSize,
-                            codeEditingOn,
-                          ],
+                          (bool lineNumsOn, double fontSize, bool codeEditingOn) => [lineNumsOn, fontSize, codeEditingOn],
                         ),
                         initialData: [
                           _settingsBloc.lineNumbersStream.value,

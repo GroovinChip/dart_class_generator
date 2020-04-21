@@ -29,21 +29,50 @@ class DartClass {
   String toString() {
     final buffer = StringBuffer();
     final _members = members ?? [];
-    final _dartdoc = dartdoc ?? '///todo: write documentation for class $name';
+    String _dartdoc = dartdoc ?? '///todo: write documentation for class $name';
+
+    /// write class dartdoc
+    // ensure dartdoc cannot be a single slash so editor doesn't crash
+    if (_dartdoc == '/') {
+      _dartdoc = '//';
+    }
     buffer.writeln(_dartdoc);
-    buffer.write('class $name');
+
+    /// write class name
+    if (name == null) {
+      buffer.write('class MyClass');
+    } else {
+      buffer.write('class $name');
+    }
+
+    /// write open class brace
     buffer.write(' {');
+
+    /// Constructor
+    // const
     if (isConst) {
       buffer.write('const ');
     }
-    buffer.write('$name');
+
+    // constructor name
+    if (name == null) {
+      buffer.write('MyClass');
+    } else {
+      buffer.write('$name');
+    }
+
+    // generic
     if (generic != null) {
       buffer.write('<$generic>');
     }
+
+    // write open constructor paren/brace
     buffer.write(' (');
     if (_members.isNotEmpty && hasNamedParameters) {
       buffer.write('{');
     }
+
+    // write class parameters
     for (final member in _members) {
       if (allMembersFinal && !member.isFinal) {
         member.isFinal = true;
@@ -56,6 +85,8 @@ class DartClass {
       }
     }
     final _private = _members.where((element) => element.isPrivate).toList();
+
+    // write private parameters
     if (_private.isNotEmpty) {
       if (_members.isNotEmpty && hasNamedParameters) {
         buffer.write('}');
@@ -71,15 +102,22 @@ class DartClass {
         }
       }
     } else {
+      // write closing constructor paren/brace
       if (_members.isNotEmpty && hasNamedParameters) {
         buffer.write('}');
       }
       buffer.write(');');
     }
+
+    /// Write blank line between constructor and class members
     buffer.writeln();
+
+    /// Write class members
     for (final member in _members) {
       buffer.writeln(member.field());
     }
+
+    /// Write toString()
     if (withToString) {
       buffer.writeln();
       buffer.writeln('@override');
@@ -87,10 +125,17 @@ class DartClass {
       buffer.writeln('return \'\';');
       buffer.writeln('}');
     }
+
+    /// Write blank line
     buffer.writeln();
+
+    /// Write closing class brace
     buffer.write('}');
+
+    /// return dart-formatted class as String
     return formatDart(buffer.toString());
   }
 }
 
+/// Format a given string as Dart code
 String formatDart(String code) => DartFormatter().format(code).toString();
