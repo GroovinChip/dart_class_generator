@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 class AddClassMemberDialog extends StatefulWidget {
   AddClassMemberDialog({
     Key key,
-    this.parent,
     this.dartClass,
     this.selectionValue,
   }) : super(key: key);
 
-  final State parent;
   final DartClass dartClass;
   final dynamic selectionValue;
 
@@ -24,8 +22,6 @@ class _AddClassMemberDialogState extends State<AddClassMemberDialog> {
   TextEditingController _mapValueDataTypeController = TextEditingController();
   TextEditingController _customTypeController = TextEditingController();
   TextEditingController _dataValueNameController = TextEditingController();
-
-  State get parentState => widget.parent;
 
   DartClass get dartClass => widget.dartClass;
 
@@ -49,55 +45,47 @@ class _AddClassMemberDialogState extends State<AddClassMemberDialog> {
     _mapKeyDataTypeController.text = '';
     _mapValueDataTypeController.text = '';
     _customTypeController.text = '';
-    Navigator.pop(context);
+    Navigator.pop(context, dartClass.members);
   }
 
   // A regular data type, like String or int
   void _addSimpleMember() {
-    parentState.setState(() {
-      members.add(
-        ClassMember(
-          name: '${_dataValueNameController.text}',
-          type: widget.selectionValue,
-        ),
-      );
-    });
+    members.add(
+      ClassMember(
+        name: '${_dataValueNameController.text}',
+        type: widget.selectionValue,
+      ),
+    );
   }
 
   // A custom data type
   void _addCustomTypeMember() {
-    parentState.setState(() {
-      members.add(
-        ClassMember(
-          name: '${_dataValueNameController.text}',
-          type: '${_customTypeController.text}',
-        ),
-      );
-    });
+    members.add(
+      ClassMember(
+        name: '${_dataValueNameController.text}',
+        type: '${_customTypeController.text}',
+      ),
+    );
   }
 
   // Map type
   void _addMapMember() {
-    parentState.setState(() {
-      widget.dartClass.members.add(
-        ClassMember(
-          name: '${_dataValueNameController.text}',
-          type: '$selectionValue<${_mapKeyDataTypeController.text}, ${_mapValueDataTypeController.text}>',
-        ),
-      );
-    });
+    members.add(
+      ClassMember(
+        name: '${_dataValueNameController.text}',
+        type: '$selectionValue<${_mapKeyDataTypeController.text}, ${_mapValueDataTypeController.text}>',
+      ),
+    );
   }
 
   // List type
   void _addListMember() {
-    parentState.setState(() {
-      members.add(
-        ClassMember(
-          name: '${_dataValueNameController.text}',
-          type: '$selectionValue<${_listDataTypeController.text}>',
-        ),
-      );
-    });
+    members.add(
+      ClassMember(
+        name: '${_dataValueNameController.text}',
+        type: '$selectionValue<${_listDataTypeController.text}>',
+      ),
+    );
   }
 
   // Reset controllers, close dialog

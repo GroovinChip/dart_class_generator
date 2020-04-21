@@ -61,6 +61,21 @@ class _MobileUIState extends State<MobileUI> {
     });
   }
 
+  Future _showAddMemberDialog(BuildContext context, value) async {
+    List<ClassMember> _members = await showDialog<List<ClassMember>>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) =>
+          AddClassMemberDialog(
+            dartClass: _class,
+            selectionValue: value,
+          ),
+    );
+    setState(() {
+      _class.members = _members;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,16 +199,9 @@ class _MobileUIState extends State<MobileUI> {
                   ),
                   tooltip: 'Add Attribute',
                   itemBuilder: (_) => classMemberTypes,
-                  onSelected: (value) => showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) =>
-                        AddClassMemberDialog(
-                          parent: this,
-                          dartClass: _class,
-                          selectionValue: value,
-                    ),
-                  ),
+                  onSelected: (value) async {
+                    await _showAddMemberDialog(context, value);
+                  },
                 ),
               ),
             ]),

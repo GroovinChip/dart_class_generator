@@ -2,6 +2,7 @@ import 'package:dartclassgenerator/breakpoints.dart';
 import 'package:dartclassgenerator/code_views/code_view.dart';
 import 'package:dartclassgenerator/editor_settings/editor_settings_bloc.dart';
 import 'package:dartclassgenerator/editor_settings/editor_settings_dialog.dart';
+import 'package:dartclassgenerator/models/class_member_model.dart';
 import 'package:dartclassgenerator/models/class_model.dart';
 import 'package:dartclassgenerator/strings.dart';
 import 'package:dartclassgenerator/widgets/add_class_member_dialog.dart';
@@ -67,6 +68,21 @@ class _DesktopUIState extends State<DesktopUI> {
       _classNameController.clear();
       _classNameController.value = TextEditingValue(text: '');
       _class.name = null;
+    });
+  }
+
+  Future _showAddMemberDialog(BuildContext context, value) async {
+    List<ClassMember> _members = await showDialog<List<ClassMember>>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) =>
+          AddClassMemberDialog(
+            dartClass: _class,
+            selectionValue: value,
+          ),
+    );
+    setState(() {
+      _class.members = _members;
     });
   }
 
@@ -305,16 +321,9 @@ class _DesktopUIState extends State<DesktopUI> {
                       ),
                       tooltip: 'Show options',
                       itemBuilder: (_) => classMemberTypes,
-                      onSelected: (value) => showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) =>
-                            AddClassMemberDialog(
-                              parent: this,
-                              dartClass: _class,
-                              selectionValue: value,
-                        ),
-                      ),
+                      onSelected: (value) async {
+                        await _showAddMemberDialog(context, value);
+                      },
                     ),
                     Spacer(),
                     FlatButton.icon(
