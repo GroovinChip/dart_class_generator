@@ -114,6 +114,7 @@ class _DesktopUIState extends State<DesktopUI> {
                                 _classDartdocController
                                   ..value = TextEditingValue(text: '///')
                                   ..selection = TextSelection.collapsed(offset: 3);
+                                _class.dartdoc = _classDartdocController.text;
                               });
                             },
                           ),
@@ -125,10 +126,10 @@ class _DesktopUIState extends State<DesktopUI> {
                       child: TextField(
                         controller: _classNameController,
                         onChanged: (name) {
+                          // handle backspacing field till empty
                           if (name.isEmpty) {
                             setState(() {
                               _classNameController.clear();
-                              _classDartdocController..value = TextEditingValue(text: '');
                               _class.name = null;
                             });
                           } else {
@@ -150,7 +151,7 @@ class _DesktopUIState extends State<DesktopUI> {
                             onPressed: () {
                               setState(() {
                                 _classNameController.clear();
-                                _classDartdocController..value = TextEditingValue(text: '');
+                                _classNameController.value = TextEditingValue(text: '');
                                 _class.name = null;
                               });
                             },
