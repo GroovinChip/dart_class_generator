@@ -2,6 +2,10 @@ import 'package:dartclassgenerator/code_views/mobile_code_view.dart';
 import 'package:dartclassgenerator/models/class_member_model.dart';
 import 'package:dartclassgenerator/models/class_model.dart';
 import 'package:dartclassgenerator/strings.dart';
+import 'package:dartclassgenerator/widgets/add_class_member_dialog.dart';
+import 'package:dartclassgenerator/widgets/add_dartdoc_to_class_member_dialog.dart';
+import 'package:dartclassgenerator/widgets/clear_button.dart';
+import 'package:dartclassgenerator/widgets/popup_menu_lists.dart';
 import 'package:dartclassgenerator/widgets/mobile_main_overflow_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,11 +29,6 @@ class _MobileUIState extends State<MobileUI> {
 
   TextEditingController _classNameController;
   TextEditingController _classDartdocController;
-  TextEditingController _dataValueNameController = TextEditingController();
-  TextEditingController _listDataTypeController = TextEditingController();
-  TextEditingController _mapKeyDataTypeController = TextEditingController();
-  TextEditingController _mapValueDataTypeController = TextEditingController();
-  TextEditingController _customTypeController = TextEditingController();
 
   @override
   void initState() {
@@ -44,14 +43,60 @@ class _MobileUIState extends State<MobileUI> {
     );
   }
 
+  void _clearClassDartdocField() {
+    setState(() {
+      _classDartdocController.clear();
+      _classDartdocController
+        ..value = TextEditingValue(text: '///')
+        ..selection = TextSelection.collapsed(offset: 3);
+      _class.dartdoc = _classDartdocController.text;
+    });
+  }
+
+  void _clearClassNameField() {
+    setState(() {
+      _classNameController.clear();
+      _classNameController.value = TextEditingValue(text: '');
+      _class.name = null;
+    });
+  }
+
+  Future _showAddMemberDialog(BuildContext context, value) async {
+    List<ClassMember> _members = await showDialog<List<ClassMember>>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) =>
+          AddClassMemberDialog(
+            dartClass: _class,
+            selectionValue: value,
+          ),
+    );
+    setState(() {
+      _class.members = _members;
+    });
+  }
+
+  Future _showMemberDartdocDialog(BuildContext context, int index) async {
+    String _dartDoc = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AddDartdocToClassMemberDialog(
+          dartClass: _class,
+          memberIndex: index,
+        );
+      },
+    );
+    setState(() {
+      _class.members[index].dartdoc = _dartDoc;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle),
-        actions: [
-          MobileMainOverflowMenu()
-        ],
+        actions: [MobileMainOverflowMenu()],
       ),
       body: CustomScrollView(
         slivers: [
@@ -61,31 +106,6 @@ class _MobileUIState extends State<MobileUI> {
                 title: Text('Basics'),
                 initiallyExpanded: true,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _classNameController,
-                      onChanged: (name) {
-                        setState(() {
-                          _class.name = name;
-                        });
-                      },
-                      textCapitalization: TextCapitalization.words,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        labelText: 'Class name',
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.clear),
-                          tooltip: 'Clear',
-                          onPressed: () {
-                            _classNameController.clear();
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -101,18 +121,30 @@ class _MobileUIState extends State<MobileUI> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         labelText: 'Class dartdoc',
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.clear),
-                          tooltip: 'Clear',
-                          onPressed: () {
-                            setState(() {
-                              _classDartdocController.clear();
-                              _classDartdocController
-                                ..value = TextEditingValue(text: '///')
-                                ..selection =
-                                TextSelection.collapsed(offset: 3);
-                            });
-                          },
+                        suffixIcon: ClearButton(
+                          onPressed: _clearClassDartdocField,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _classNameController,
+                      onChanged: (name) {
+                        setState(() {
+                          _class.name = name;
+                        });
+                      },
+                      autofocus: true,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        labelText: 'Class name',
+                        suffixIcon: ClearButton(
+                          onPressed: _clearClassNameField,
                         ),
                       ),
                     ),
@@ -132,10 +164,10 @@ class _MobileUIState extends State<MobileUI> {
                     onChanged: _class.members.isEmpty
                         ? null
                         : (val) {
-                      setState(() {
-                        _class.hasNamedParameters = val;
-                      });
-                    },
+                            setState(() {
+                              _class.hasNamedParameters = val;
+                            });
+                          },
                     title: Text('Use Named Parameters'),
                     activeColor: Theme.of(context).accentColor,
                   ),
@@ -146,10 +178,10 @@ class _MobileUIState extends State<MobileUI> {
                     onChanged: _class.members.isEmpty
                         ? null
                         : (val) {
-                      setState(() {
-                        _class.allMembersFinal = val;
-                      });
-                    },
+                            setState(() {
+                              _class.allMembersFinal = val;
+                            });
+                          },
                   ),
                   /*SwitchListTile(
                           value: _class.withToString,
@@ -170,8 +202,7 @@ class _MobileUIState extends State<MobileUI> {
                 title: Text('Class Members'),
                 trailing: PopupMenuButton(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 12, right: 16, top: 8, bottom: 8),
+                    padding: const EdgeInsets.only(left: 12, right: 16, top: 8, bottom: 8),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -182,177 +213,10 @@ class _MobileUIState extends State<MobileUI> {
                     ),
                   ),
                   tooltip: 'Add Attribute',
-                  itemBuilder: (_) => [
-                    PopupMenuItem(
-                      child: Text('String'),
-                      value: 'String',
-                    ),
-                    PopupMenuItem(
-                      child: Text('Integer'),
-                      value: 'int',
-                    ),
-                    PopupMenuItem(
-                      child: Text('Double'),
-                      value: 'double',
-                    ),
-                    PopupMenuItem(
-                      child: Text('Boolean'),
-                      value: 'bool',
-                    ),
-                    PopupMenuItem(
-                      child: Text('List'),
-                      value: 'List',
-                    ),
-                    PopupMenuItem(
-                      child: Text('Map'),
-                      value: 'Map',
-                    ),
-                    PopupMenuItem(
-                      child: Text('DateTime'),
-                      value: 'DateTime',
-                    ),
-                    PopupMenuItem(
-                      child: Text('Custom'),
-                      value: 'custom type',
-                    ),
-                  ],
-                  onSelected: (value) => showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) => SimpleDialog(
-                      title: Text('Add $value'),
-                      children: [
-                        if (value == 'List')
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              autofocus: true,
-                              controller: _listDataTypeController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                labelText: 'Data type',
-                              ),
-                            ),
-                          ),
-                        if (value == 'Map')
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              autofocus: true,
-                              controller: _mapKeyDataTypeController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                labelText: 'Key type',
-                              ),
-                            ),
-                          ),
-                        if (value == 'Map')
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              controller: _mapValueDataTypeController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                labelText: 'Value type',
-                              ),
-                            ),
-                          ),
-                        if (value == 'custom type')
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              autofocus: true,
-                              controller: _customTypeController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                labelText: 'Data type',
-                              ),
-                            ),
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            autofocus: true,
-                            controller: _dataValueNameController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              labelText: 'Attribute name',
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            FlatButton(
-                              child: Text('Cancel'),
-                              onPressed: () {
-                                _dataValueNameController.text = '';
-                                _listDataTypeController.text = '';
-                                _mapKeyDataTypeController.text = '';
-                                _mapValueDataTypeController.text = '';
-                                Navigator.pop(context);
-                              },
-                            ),
-                            FlatButton(
-                              textColor: Color(0xff82b1ff),
-                              child: Text('Finish'),
-                              onPressed: () {
-                                if (value == 'List') {
-                                  setState(() {
-                                    _class.members.add(
-                                      ClassMember(
-                                        name:
-                                        '${_dataValueNameController.text}',
-                                        type:
-                                        '$value<${_listDataTypeController.text}>',
-                                      ),
-                                    );
-                                  });
-                                } else if (value == 'custom type') {
-                                  setState(() {
-                                    _class.members.add(
-                                      ClassMember(
-                                        name:
-                                        '${_dataValueNameController.text}',
-                                        type:
-                                        '${_customTypeController.text}',
-                                      ),
-                                    );
-                                  });
-                                } else {
-                                  setState(() {
-                                    _class.members.add(
-                                      ClassMember(
-                                        name:
-                                        '${_dataValueNameController.text}',
-                                        type: value,
-                                      ),
-                                    );
-                                  });
-                                }
-                                _dataValueNameController.text = '';
-                                _listDataTypeController.text = '';
-                                _mapKeyDataTypeController.text = '';
-                                _mapValueDataTypeController.text = '';
-                                _customTypeController.text = '';
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  itemBuilder: (_) => classMemberTypes,
+                  onSelected: (value) async {
+                    await _showAddMemberDialog(context, value);
+                  },
                 ),
               ),
             ]),
@@ -361,7 +225,7 @@ class _MobileUIState extends State<MobileUI> {
             viewportFraction: 0.1,
             padEnds: false,
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 ClassMember member = _class.members[index];
                 return ListTileTheme(
                   child: ListTile(
@@ -374,105 +238,11 @@ class _MobileUIState extends State<MobileUI> {
                     title: Text('${member.type} ${member.name}'),
                     trailing: PopupMenuButton(
                       icon: Icon(Icons.more_vert),
-                      itemBuilder: (_) => [
-                        PopupMenuItem(
-                          child: Text('Add dartdoc'),
-                          value: 'Dartdoc',
-                        ),
-                        PopupMenuItem(
-                          child: Text('Make required'),
-                          value: 'Required',
-                        ),
-                        PopupMenuItem(
-                          child: Text('Make private'),
-                          value: 'Private',
-                        ),
-                        PopupMenuItem(
-                          child: Text('Remove member'),
-                          value: 'Remove',
-                        ),
-                      ],
-                      onSelected: (value) {
+                      itemBuilder: (_) => classMemberOptions,
+                      onSelected: (value) async {
                         switch (value) {
                           case 'Dartdoc':
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                TextEditingController
-                                _memberDartdocController =
-                                TextEditingController(text: '///');
-                                return SimpleDialog(
-                                  title: Text(
-                                      'Add dartdoc to ${_class.members[index].type} ${_class.members[index].name}'),
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 16,
-                                          right: 16,
-                                          top: 8,
-                                          bottom: 8),
-                                      child: TextField(
-                                        controller:
-                                        _memberDartdocController,
-                                        onChanged: (dDoc) {
-                                          setState(() {
-                                            _class.members[index]
-                                                .dartdoc = dDoc;
-                                          });
-                                        },
-                                        textCapitalization:
-                                        TextCapitalization.words,
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(12),
-                                          ),
-                                          labelText: 'Class dartdoc',
-                                          suffixIcon: IconButton(
-                                            icon: Icon(Icons.clear),
-                                            tooltip: 'Clear',
-                                            onPressed: () {
-                                              setState(() {
-                                                _memberDartdocController
-                                                    .clear();
-                                                _memberDartdocController
-                                                  ..value =
-                                                  TextEditingValue(
-                                                      text: '///')
-                                                  ..selection =
-                                                  TextSelection
-                                                      .collapsed(
-                                                      offset: 3);
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.end,
-                                      children: [
-                                        FlatButton(
-                                          textColor: Theme.of(context)
-                                              .accentColor,
-                                          child: Text('Add'),
-                                          onPressed: () {
-                                            setState(() {
-                                              _class.members[index]
-                                                  .dartdoc =
-                                                  _memberDartdocController
-                                                      .text;
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                            await _showMemberDartdocDialog(context, index);
                             break;
                           case 'Required':
                             if (member.isRequired == false) {

@@ -140,14 +140,10 @@ class _MobileCodeViewState extends State<MobileCodeView> {
               switch (value) {
                 case 'DownloadDartFile':
                   if (Platform.isAndroid) {
-                    permissionChecker
-                        .checkStoragePermission()
-                        .then((PermissionStatus storagePermission) {
+                    permissionChecker.checkStoragePermission().then((PermissionStatus storagePermission) {
                       if (storagePermission.isGranted) {
                         _initStorage();
-                        dartFileStorage
-                            .saveDartFile(widget.dartClass.toString())
-                            .then((value) {
+                        dartFileStorage.saveDartFile(widget.dartClass.toString()).then((value) {
                           _scaffoldKey.currentState.showSnackBar(
                             SnackBar(
                               content: Text(
@@ -159,7 +155,13 @@ class _MobileCodeViewState extends State<MobileCodeView> {
                               action: SnackBarAction(
                                 label: 'Open',
                                 textColor: Colors.white,
-                                onPressed: () => Intent()..setData(Uri.parse(dartFileStorage.androidFilePath))..putExtra('org.openintents.extra.ABSOLUTE_PATH', dartFileStorage.androidFilePath)..setType('resource/folder')..setAction(Action.ACTION_VIEW)..startActivity(),
+                                onPressed: () =>
+                                Intent()
+                                  ..setData(Uri.parse(dartFileStorage.androidFilePath))
+                                  ..putExtra('org.openintents.extra.ABSOLUTE_PATH', dartFileStorage.androidFilePath)
+                                  ..setType('resource/folder')
+                                  ..setAction(Action.ACTION_VIEW)
+                                  ..startActivity(),
                               ),
                             ),
                           );
@@ -228,17 +230,14 @@ class _MobileCodeViewState extends State<MobileCodeView> {
             if (widget.ext == 'swift') {
               _syntax = Syntax.SWIFT;
             }
-            if (widget.ext == 'js' ||
-                widget.ext == 'ts' ||
-                widget.ext == 'jsx') {
+            if (widget.ext == 'js' || widget.ext == 'ts' || widget.ext == 'jsx') {
               _syntax = Syntax.JAVASCRIPT;
             }
             if (widget.ext == 'java') {
               _syntax = Syntax.JAVA;
             }
           }
-          final _theme =
-              !isDark ? SyntaxTheme.standard() : SyntaxTheme.oceanSunset();
+          final _theme = !isDark ? SyntaxTheme.standard() : SyntaxTheme.oceanSunset();
           return !_codeEditingOn
               ? SyntaxView(
                   code: _controller.text,

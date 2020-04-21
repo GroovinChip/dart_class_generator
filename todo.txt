@@ -29,3 +29,6 @@
 //todo: enums
 //todo: static
 //todo: typedefs
+//todo: live warnings/syntax error highlighting
+//todo: add an optional main()?
+//todo: toggle class key
