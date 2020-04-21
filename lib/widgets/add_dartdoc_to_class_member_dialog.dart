@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 class AddDartdocToClassMemberDialog extends StatefulWidget {
   AddDartdocToClassMemberDialog({
     Key key,
-    this.parent,
     this.dartClass,
     this.memberIndex,
   }) : super(key: key);
 
-  final State parent;
   final DartClass dartClass;
   final int memberIndex;
 
@@ -21,11 +19,7 @@ class AddDartdocToClassMemberDialog extends StatefulWidget {
 
 class _AddDartdocToClassMemberDialogState extends State<AddDartdocToClassMemberDialog> {
   TextEditingController _memberDartdocController;
-
-  State get parentState => widget.parent;
-
   List<ClassMember> get members => widget.dartClass.members;
-
   int get memberIndex => widget.memberIndex;
 
   @override
@@ -35,7 +29,7 @@ class _AddDartdocToClassMemberDialogState extends State<AddDartdocToClassMemberD
   }
 
   void _initDartdocController() {
-    if (members[memberIndex] == null) {
+    if (members[memberIndex].dartdoc == null) {
       _memberDartdocController = TextEditingController(text: '///');
     } else {
       _memberDartdocController = TextEditingController(text: '${members[memberIndex].dartdoc}');
@@ -43,19 +37,15 @@ class _AddDartdocToClassMemberDialogState extends State<AddDartdocToClassMemberD
   }
 
   void _clearDartdocField() {
-    parentState.setState(() {
-      _memberDartdocController.clear();
-      _memberDartdocController
-        ..value = TextEditingValue(text: '///')
-        ..selection = TextSelection.collapsed(offset: 3);
-    });
+    _memberDartdocController.clear();
+    _memberDartdocController
+      ..value = TextEditingValue(text: '///')
+      ..selection = TextSelection.collapsed(offset: 3);
   }
 
   void _updateMemberDartdoc() {
-    parentState.setState(() {
-      members[memberIndex].dartdoc = _memberDartdocController.text;
-    });
-    Navigator.pop(context);
+    members[memberIndex].dartdoc = _memberDartdocController.text;
+    Navigator.pop(context, members[memberIndex].dartdoc);
   }
 
   @override

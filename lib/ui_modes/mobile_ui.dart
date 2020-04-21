@@ -76,6 +76,21 @@ class _MobileUIState extends State<MobileUI> {
     });
   }
 
+  Future _showMemberDartdocDialog(BuildContext context, int index) async {
+    String _dartDoc = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AddDartdocToClassMemberDialog(
+          dartClass: _class,
+          memberIndex: index,
+        );
+      },
+    );
+    setState(() {
+      _class.members[index].dartdoc = _dartDoc;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,19 +239,10 @@ class _MobileUIState extends State<MobileUI> {
                     trailing: PopupMenuButton(
                       icon: Icon(Icons.more_vert),
                       itemBuilder: (_) => classMemberOptions,
-                      onSelected: (value) {
+                      onSelected: (value) async {
                         switch (value) {
                           case 'Dartdoc':
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AddDartdocToClassMemberDialog(
-                                  parent: this,
-                                  dartClass: _class,
-                                  memberIndex: index,
-                                );
-                              },
-                            );
+                            await _showMemberDartdocDialog(context, index);
                             break;
                           case 'Required':
                             if (member.isRequired == false) {
