@@ -1,3 +1,9 @@
+# 0.0.11 (1/21/2020)
+- Ensure class dartdoc comment cannot be one slash
+- Ensure class name cannot be null
+- Support macOS and linux (Thanks [Rody Davis](https://github.com/RodyDavis) !)
+- A lot of refactoring
+
 # 0.0.10 (4/19/2019)
 - Download your class as a .dart file! On Windows and Web, save it anywhere you want. On Android, a `DartClassGenerator` directory will be created in internal storage and you can find your code there.
 

@@ -43,14 +43,14 @@ A Flutter that can generate Dart classes. Runs on Android, Windows and Web. Chec
 - Generate instantiated classes (with mock data) from created class
 - Class templates
 - json_serializable support
-- Annotation supoprt
+- Annotation support
 - Strong casing
 - Factory support
 - Info/help/about section in-app
 
 ## Bugs/unwanted behavior
 - `Divider` widgets do not show on web
-- Backspacing the class name textfield until no characters are left crashes the code viewer
+- Clearing the class name textfield on Windows using the 'clear' button and typing again appends new text to previous. However, making sure to click on the field before typing again results in the correct behavior.
 - Editable code view does not support selecting and copying code
 - Editable code view does not accurately reflect the cursor location on web/windows
 - Editable code view font size is not configurable

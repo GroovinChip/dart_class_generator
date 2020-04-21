@@ -1,5 +1,5 @@
 //todo: MAJOR code cleanup
-//todo: bug - backspacing class name until field is empty crashes code viewer. Oddly, clearing the field via the button does not.
+//todo: bug - clearing class name texfield on windows and typing again appends new text to previous
 //todo: bug - dividers do not show on web
 //todo: disallow duplicate members
 //todo: functions?
