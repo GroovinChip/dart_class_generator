@@ -6,30 +6,6 @@ import 'package:dartclassgenerator/ui_modes/tablet_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-//todo: MAJOR code cleanup
-//todo: bug - backspacing class name until field is empty crashes code viewer. Oddly, clearing the field via the button does not.
-//todo: bug - dividers do not show on web
-//todo: disallow duplicate members
-//todo: functions?
-//todo: export code screenshot
-//todo: export to gist, dartpad, codepen
-//todo: default values for members
-//todo: generate instantiated classes
-//todo: create, save, load class templates
-//todo: save as draft
-//todo: add toString() (in progress)
-//todo: allow adding asserts
-//todo: recase
-//todo: annotations
-//todo: support factories
-//todo: add JSON Serializable stuff
-//todo: dynamic font selection
-//todo: editable code view font size
-//todo: readonly code view font
-//todo: persist user settings
-//todo: show changelog on update?
-//todo: prompt user to download update on Windows, Android (?)
-
 void main() {
   runApp(DartClassGeneratorApp());
 }
@@ -46,12 +22,14 @@ class DartClassGeneratorApp extends StatelessWidget {
           primaryColor: Color(0xff2962ff),
           accentColor: Color(0xff4d82cb),
           textSelectionHandleColor: Color(0xff4d82cb),
+          textSelectionColor: Color(0xff4d82cb),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         darkTheme: ThemeData.dark().copyWith(
           primaryColor: Color(0xff2962ff),
           accentColor: Color(0xff4d82cb),
           textSelectionHandleColor: Color(0xff82b1ff),
+          textSelectionColor: Color(0xff4d82cb),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         themeMode: ThemeMode.dark,
