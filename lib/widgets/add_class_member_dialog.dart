@@ -25,12 +25,96 @@ class _AddClassMemberDialogState extends State<AddClassMemberDialog> {
   TextEditingController _customTypeController = TextEditingController();
   TextEditingController _dataValueNameController = TextEditingController();
 
+  State get parentState => widget.parent;
+
+  DartClass get dartClass => widget.dartClass;
+
+  List<ClassMember> get members => dartClass.members;
+
+  dynamic get selectionValue => widget.selectionValue;
+
+  // Add class member, close dialog
+  void _addClassMember(BuildContext context) {
+    if (selectionValue == 'List') {
+      _addListMember();
+    } else if (widget.selectionValue == 'Map') {
+      _addMapMember();
+    } else if (widget.selectionValue == 'custom type') {
+      _addCustomTypeMember();
+    } else {
+      _addSimpleMember();
+    }
+    _dataValueNameController.text = '';
+    _listDataTypeController.text = '';
+    _mapKeyDataTypeController.text = '';
+    _mapValueDataTypeController.text = '';
+    _customTypeController.text = '';
+    Navigator.pop(context);
+  }
+
+  // A regular data type, like String or int
+  void _addSimpleMember() {
+    parentState.setState(() {
+      members.add(
+        ClassMember(
+          name: '${_dataValueNameController.text}',
+          type: widget.selectionValue,
+        ),
+      );
+    });
+  }
+
+  // A custom data type
+  void _addCustomTypeMember() {
+    parentState.setState(() {
+      members.add(
+        ClassMember(
+          name: '${_dataValueNameController.text}',
+          type: '${_customTypeController.text}',
+        ),
+      );
+    });
+  }
+
+  // Map type
+  void _addMapMember() {
+    parentState.setState(() {
+      widget.dartClass.members.add(
+        ClassMember(
+          name: '${_dataValueNameController.text}',
+          type: '$selectionValue<${_mapKeyDataTypeController.text}, ${_mapValueDataTypeController.text}>',
+        ),
+      );
+    });
+  }
+
+  // List type
+  void _addListMember() {
+    parentState.setState(() {
+      members.add(
+        ClassMember(
+          name: '${_dataValueNameController.text}',
+          type: '$selectionValue<${_listDataTypeController.text}>',
+        ),
+      );
+    });
+  }
+
+  // Reset controllers, close dialog
+  void _cancel(BuildContext context) {
+    _dataValueNameController.text = '';
+    _listDataTypeController.text = '';
+    _mapKeyDataTypeController.text = '';
+    _mapValueDataTypeController.text = '';
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: Text('Add ${widget.selectionValue}'),
+      title: Text('Add $selectionValue'),
       children: [
-        if (widget.selectionValue == 'List')
+        if (selectionValue == 'List')
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -44,7 +128,7 @@ class _AddClassMemberDialogState extends State<AddClassMemberDialog> {
               ),
             ),
           ),
-        if (widget.selectionValue == 'Map')
+        if (selectionValue == 'Map')
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -58,7 +142,7 @@ class _AddClassMemberDialogState extends State<AddClassMemberDialog> {
               ),
             ),
           ),
-        if (widget.selectionValue == 'Map')
+        if (selectionValue == 'Map')
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -71,7 +155,7 @@ class _AddClassMemberDialogState extends State<AddClassMemberDialog> {
               ),
             ),
           ),
-        if (widget.selectionValue == 'custom type')
+        if (selectionValue == 'custom type')
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -104,60 +188,14 @@ class _AddClassMemberDialogState extends State<AddClassMemberDialog> {
             FlatButton(
               child: Text('Cancel'),
               onPressed: () {
-                _dataValueNameController.text = '';
-                _listDataTypeController.text = '';
-                _mapKeyDataTypeController.text = '';
-                _mapValueDataTypeController.text = '';
-                Navigator.pop(context);
+                _cancel(context);
               },
             ),
             FlatButton(
               textColor: Color(0xff82b1ff),
               child: Text('Finish'),
               onPressed: () {
-                if (widget.selectionValue == 'List') {
-                  widget.parent.setState(() {
-                    widget.dartClass.members.add(
-                      ClassMember(
-                        name: '${_dataValueNameController.text}',
-                        type: '${widget.selectionValue}<${_listDataTypeController.text}>',
-                      ),
-                    );
-                  });
-                } else if (widget.selectionValue == 'Map') {
-                  widget.parent.setState(() {
-                    widget.dartClass.members.add(
-                      ClassMember(
-                        name: '${_dataValueNameController.text}',
-                        type: '${widget.selectionValue}<${_mapKeyDataTypeController.text}, ${_mapValueDataTypeController.text}>',
-                      ),
-                    );
-                  });
-                } else if (widget.selectionValue == 'custom type') {
-                  widget.parent.setState(() {
-                    widget.dartClass.members.add(
-                      ClassMember(
-                        name: '${_dataValueNameController.text}',
-                        type: '${_customTypeController.text}',
-                      ),
-                    );
-                  });
-                } else {
-                  widget.parent.setState(() {
-                    widget.dartClass.members.add(
-                      ClassMember(
-                        name: '${_dataValueNameController.text}',
-                        type: widget.selectionValue,
-                      ),
-                    );
-                  });
-                }
-                _dataValueNameController.text = '';
-                _listDataTypeController.text = '';
-                _mapKeyDataTypeController.text = '';
-                _mapValueDataTypeController.text = '';
-                _customTypeController.text = '';
-                Navigator.pop(context);
+                _addClassMember(context);
               },
             ),
           ],
