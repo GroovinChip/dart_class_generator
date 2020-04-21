@@ -2,6 +2,7 @@ import 'package:dartclassgenerator/code_views/mobile_code_view.dart';
 import 'package:dartclassgenerator/models/class_member_model.dart';
 import 'package:dartclassgenerator/models/class_model.dart';
 import 'package:dartclassgenerator/strings.dart';
+import 'package:dartclassgenerator/widgets/add_class_member_dialog.dart';
 import 'package:dartclassgenerator/widgets/popup_menu_lists.dart';
 import 'package:dartclassgenerator/widgets/mobile_main_overflow_menu.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,6 @@ class _MobileUIState extends State<MobileUI> {
 
   TextEditingController _classNameController;
   TextEditingController _classDartdocController;
-  TextEditingController _dataValueNameController = TextEditingController();
-  TextEditingController _listDataTypeController = TextEditingController();
-  TextEditingController _mapKeyDataTypeController = TextEditingController();
-  TextEditingController _mapValueDataTypeController = TextEditingController();
-  TextEditingController _customTypeController = TextEditingController();
 
   @override
   void initState() {
@@ -183,133 +179,11 @@ class _MobileUIState extends State<MobileUI> {
                   onSelected: (value) => showDialog(
                     context: context,
                     barrierDismissible: false,
-                    builder: (_) => SimpleDialog(
-                      title: Text('Add $value'),
-                      children: [
-                        if (value == 'List')
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              autofocus: true,
-                              controller: _listDataTypeController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                labelText: 'Data type',
-                              ),
-                            ),
-                          ),
-                        if (value == 'Map')
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              autofocus: true,
-                              controller: _mapKeyDataTypeController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                labelText: 'Key type',
-                              ),
-                            ),
-                          ),
-                        if (value == 'Map')
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              controller: _mapValueDataTypeController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                labelText: 'Value type',
-                              ),
-                            ),
-                          ),
-                        if (value == 'custom type')
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              autofocus: true,
-                              controller: _customTypeController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                labelText: 'Data type',
-                              ),
-                            ),
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            autofocus: true,
-                            controller: _dataValueNameController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              labelText: 'Attribute name',
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            FlatButton(
-                              child: Text('Cancel'),
-                              onPressed: () {
-                                _dataValueNameController.text = '';
-                                _listDataTypeController.text = '';
-                                _mapKeyDataTypeController.text = '';
-                                _mapValueDataTypeController.text = '';
-                                Navigator.pop(context);
-                              },
-                            ),
-                            FlatButton(
-                              textColor: Color(0xff82b1ff),
-                              child: Text('Finish'),
-                              onPressed: () {
-                                if (value == 'List') {
-                                  setState(() {
-                                    _class.members.add(
-                                      ClassMember(
-                                        name: '${_dataValueNameController.text}',
-                                        type: '$value<${_listDataTypeController.text}>',
-                                      ),
-                                    );
-                                  });
-                                } else if (value == 'custom type') {
-                                  setState(() {
-                                    _class.members.add(
-                                      ClassMember(
-                                        name: '${_dataValueNameController.text}',
-                                        type: '${_customTypeController.text}',
-                                      ),
-                                    );
-                                  });
-                                } else {
-                                  setState(() {
-                                    _class.members.add(
-                                      ClassMember(
-                                        name: '${_dataValueNameController.text}',
-                                        type: value,
-                                      ),
-                                    );
-                                  });
-                                }
-                                _dataValueNameController.text = '';
-                                _listDataTypeController.text = '';
-                                _mapKeyDataTypeController.text = '';
-                                _mapValueDataTypeController.text = '';
-                                _customTypeController.text = '';
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                    builder: (_) =>
+                        AddClassMemberDialog(
+                          parent: this,
+                          dartClass: _class,
+                          selectionValue: value,
                     ),
                   ),
                 ),
