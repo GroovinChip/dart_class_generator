@@ -372,36 +372,7 @@ class _TabletUIState extends State<TabletUI> {
                               ),
                             ),
                             tooltip: 'Show options',
-                            itemBuilder: (_) => [
-                              PopupMenuItem(
-                                child: Text('String'),
-                                value: 'String',
-                              ),
-                              PopupMenuItem(
-                                child: Text('Integer'),
-                                value: 'int',
-                              ),
-                              PopupMenuItem(
-                                child: Text('Double'),
-                                value: 'double',
-                              ),
-                              PopupMenuItem(
-                                child: Text('Boolean'),
-                                value: 'bool',
-                              ),
-                              PopupMenuItem(
-                                child: Text('List'),
-                                value: 'List',
-                              ),
-                              PopupMenuItem(
-                                child: Text('Map'),
-                                value: 'Map',
-                              ),
-                              PopupMenuItem(
-                                child: Text('DateTime'),
-                                value: 'DateTime',
-                              ),
-                            ],
+                            itemBuilder: (_) => classMemberTypes,
                             onSelected: (value) async {
                               await _showAddMemberDialog(context, value);
                             },
