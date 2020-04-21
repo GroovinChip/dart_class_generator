@@ -29,7 +29,13 @@ class DartClass {
   String toString() {
     final buffer = StringBuffer();
     final _members = members ?? [];
-    String _dartdoc = dartdoc ?? '///todo: write documentation for class $name';
+    String _dartdoc;
+
+    if (name == null || name.isEmpty) {
+      _dartdoc = '///todo: write documentation for class MyClass';
+    } else {
+      _dartdoc = '///todo: write documentation for class $name';
+    }
 
     /// write class dartdoc
     // ensure dartdoc cannot be a single slash so editor doesn't crash
@@ -39,7 +45,7 @@ class DartClass {
     buffer.writeln(_dartdoc);
 
     /// write class name
-    if (name == null) {
+    if (name == null || name.isEmpty) {
       buffer.write('class MyClass');
     } else {
       buffer.write('class $name');
@@ -55,7 +61,7 @@ class DartClass {
     }
 
     // constructor name
-    if (name == null) {
+    if (name == null || name.isEmpty) {
       buffer.write('MyClass');
     } else {
       buffer.write('$name');
@@ -131,6 +137,8 @@ class DartClass {
 
     /// Write closing class brace
     buffer.write('}');
+
+    //print(formatDart(buffer.toString()));
 
     /// return dart-formatted class as String
     return formatDart(buffer.toString());
