@@ -1,6 +1,6 @@
 # 0.0.12 (1/22/2020)
 - Fix class level dartdoc handling
-
+- Listen to class name and class dartdoc textfields better
 
 # 0.0.11 (1/21/2020)
 - Ensure class dartdoc comment cannot be one slash
