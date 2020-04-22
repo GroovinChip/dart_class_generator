@@ -36,50 +36,48 @@ class _DesktopUIState extends State<DesktopUI> {
   bool _withNamedParameters = false;
 
   DartClass _class;
-
   TextEditingController _classNameController;
   TextEditingController _classDartdocController;
 
   @override
   void initState() {
     super.initState();
-    _classNameController = TextEditingController(text: 'MyClass');
-    _classDartdocController = TextEditingController(text: '///');
+    final defaultName = 'MyClass';
     _class = DartClass(
-      name: _classNameController.text,
+      name: defaultName,
       isConst: _withConstConstructor,
       hasNamedParameters: _withNamedParameters,
       members: [],
     );
+    // listen to dartdoc textfield
+    _classDartdocController = TextEditingController();
+    _classDartdocController.addListener(() {
+      setState(() => _class.dartdoc = _classDartdocController.text);
+    });
+
+    // listen to class name textfield
+    _classNameController = TextEditingController(text: defaultName);
+    _classNameController.addListener(() {
+      setState(() => _class.name = _classNameController.text);
+    });
   }
 
   void _clearClassDartdocField() {
-    setState(() {
-      _classDartdocController.clear();
-      _classDartdocController
-        ..value = TextEditingValue(text: '///')
-        ..selection = TextSelection.collapsed(offset: 3);
-      _class.dartdoc = _classDartdocController.text;
-    });
+    _classDartdocController.clear();
   }
 
   void _clearClassNameField() {
-    setState(() {
-      _classNameController.clear();
-      _classNameController.value = TextEditingValue(text: '');
-      _class.name = null;
-    });
+    _classNameController.clear();
   }
 
   Future _showAddMemberDialog(BuildContext context, value) async {
     List<ClassMember> _members = await showDialog<List<ClassMember>>(
       context: context,
       barrierDismissible: false,
-      builder: (_) =>
-          AddClassMemberDialog(
-            dartClass: _class,
-            selectionValue: value,
-          ),
+      builder: (_) => AddClassMemberDialog(
+        dartClass: _class,
+        selectionValue: value,
+      ),
     );
     setState(() {
       _class.members = _members;
@@ -135,17 +133,7 @@ class _DesktopUIState extends State<DesktopUI> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         controller: _classDartdocController,
-                        onChanged: (dDoc) {
-                          setState(() {
-                            _class.dartdoc = dDoc;
-                          });
-                        },
-                        onEditingComplete: () {
-                          setState(() {
-                            _class.dartdoc = _classDartdocController.text;
-                          });
-                        },
-                        textCapitalization: TextCapitalization.words,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -161,20 +149,7 @@ class _DesktopUIState extends State<DesktopUI> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         controller: _classNameController,
-                        onChanged: (name) {
-                          // handle backspacing field till empty
-                          if (name.isEmpty) {
-                            setState(() {
-                              _classNameController.clear();
-                              _class.name = null;
-                            });
-                          } else {
-                            setState(() {
-                              _class.name = name;
-                            });
-                          }
-                        },
-                        autofocus: true,
+                        //autofocus: true,
                         textCapitalization: TextCapitalization.words,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -221,18 +196,18 @@ class _DesktopUIState extends State<DesktopUI> {
                               });
                             },
                     ),
-                    /*SwitchListTile(
-                            value: _class.withToString,
-                            title: Text('Override toString()'),
-                            activeColor: Theme.of(context).accentColor,
-                            onChanged: _class.members.isEmpty
-                                ? null
-                                : (val) {
-                                    setState(() {
-                                      _class.withToString = val;
-                                    });
-                                  },
-                          ),*/
+                    SwitchListTile(
+                      value: _class.withToString,
+                      title: Text('Override toString()'),
+                      activeColor: Theme.of(context).accentColor,
+                      onChanged: _class.members.isEmpty
+                          ? null
+                          : (val) {
+                              setState(() {
+                                _class.withToString = val;
+                              });
+                            },
+                    ),
                     /*SwitchListTile(
                             value: _isClassSerializable,
                             onChanged: (val) {

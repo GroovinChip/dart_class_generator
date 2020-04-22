@@ -31,18 +31,17 @@ class DartClass {
     final _members = members ?? [];
     String _dartdoc;
 
-    if (name == null || name.isEmpty) {
-      _dartdoc = '///todo: write documentation for class MyClass';
-    } else {
-      _dartdoc = '///todo: write documentation for class $name';
-    }
-
     /// write class dartdoc
-    // ensure dartdoc cannot be a single slash so editor doesn't crash
-    if (_dartdoc == '/') {
-      _dartdoc = '//';
+    if (dartdoc == null || dartdoc.isEmpty) {
+      if (name == null || name.isEmpty) {
+        _dartdoc = 'TODO: write documentation for class MyClass';
+      } else {
+        _dartdoc = 'TODO: write documentation for class $name';
+      }
+    } else {
+      _dartdoc = dartdoc;
     }
-    buffer.writeln(_dartdoc);
+    buffer.writeln('/// $_dartdoc');
 
     /// write class name
     if (name == null || name.isEmpty) {
@@ -128,7 +127,17 @@ class DartClass {
       buffer.writeln();
       buffer.writeln('@override');
       buffer.writeln('String toString() {');
-      buffer.writeln('return \'\';');
+      buffer.write('return ');
+      buffer.write('\'$name{');
+      for (int i = 0; i < _members.length; i++) {
+        buffer.write('${_members[i].name} \$${_members[i].name}');
+        if (i != _members.length - 1) {
+          buffer.write(', ');
+        }
+      }
+      buffer.write('}\'');
+      buffer.write(';');
+      //buffer.writeln('return ${'some text'};');
       buffer.writeln('}');
     }
 
@@ -138,7 +147,7 @@ class DartClass {
     /// Write closing class brace
     buffer.write('}');
 
-    //print(formatDart(buffer.toString()));
+    //print(buffer.toString());
 
     /// return dart-formatted class as String
     return formatDart(buffer.toString());

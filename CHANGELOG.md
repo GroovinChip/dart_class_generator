@@ -1,3 +1,7 @@
+# 0.0.12 (1/22/2020)
+- Fix class level dartdoc handling
+
+
 # 0.0.11 (1/21/2020)
 - Ensure class dartdoc comment cannot be one slash
 - Ensure class name cannot be null

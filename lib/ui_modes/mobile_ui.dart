@@ -33,32 +33,32 @@ class _MobileUIState extends State<MobileUI> {
   @override
   void initState() {
     super.initState();
-    _classNameController = TextEditingController(text: 'MyClass');
-    _classDartdocController = TextEditingController(text: '///');
+    final defaultName = 'MyClass';
     _class = DartClass(
-      name: _classNameController.text,
+      name: defaultName,
       isConst: _withConstConstructor,
       hasNamedParameters: _withNamedParameters,
       members: [],
     );
+    // listen to dartdoc textfield
+    _classDartdocController = TextEditingController();
+    _classDartdocController.addListener(() {
+      setState(() => _class.dartdoc = _classDartdocController.text);
+    });
+
+    // listen to class name textfield
+    _classNameController = TextEditingController(text: defaultName);
+    _classNameController.addListener(() {
+      setState(() => _class.name = _classNameController.text);
+    });
   }
 
   void _clearClassDartdocField() {
-    setState(() {
-      _classDartdocController.clear();
-      _classDartdocController
-        ..value = TextEditingValue(text: '///')
-        ..selection = TextSelection.collapsed(offset: 3);
-      _class.dartdoc = _classDartdocController.text;
-    });
+    _classDartdocController.clear();
   }
 
   void _clearClassNameField() {
-    setState(() {
-      _classNameController.clear();
-      _classNameController.value = TextEditingValue(text: '');
-      _class.name = null;
-    });
+    _classNameController.clear();
   }
 
   Future _showAddMemberDialog(BuildContext context, value) async {
