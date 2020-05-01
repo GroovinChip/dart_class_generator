@@ -115,7 +115,7 @@ class _MobileUIState extends State<MobileUI> {
                           _class.dartdoc = dDoc;
                         });
                       },
-                      textCapitalization: TextCapitalization.words,
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -183,18 +183,18 @@ class _MobileUIState extends State<MobileUI> {
                             });
                           },
                   ),
-                  /*SwitchListTile(
-                          value: _class.withToString,
-                          title: Text('Override toString()'),
-                          activeColor: Theme.of(context).accentColor,
-                          onChanged: _class.members.isEmpty
-                              ? null
-                              : (val) {
-                                  setState(() {
-                                    _class.withToString = val;
-                                  });
-                                },
-                        ),*/
+                  SwitchListTile(
+                    value: _class.withToString,
+                    title: Text('Override toString()'),
+                    activeColor: Theme.of(context).accentColor,
+                    onChanged: _class.members.isEmpty
+                        ? null
+                        : (val) {
+                      setState(() {
+                        _class.withToString = val;
+                      });
+                    },
+                  ),
                 ],
               ),
               Divider(height: 0),

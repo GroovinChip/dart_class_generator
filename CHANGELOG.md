@@ -1,3 +1,7 @@
+# 0.0.13
+- Fix incorrect text capitalization for some textfields
+- Add toString option to mobile layout
+
 # 0.0.12 (1/22/2020)
 - Fix class level dartdoc handling
 - Listen to class name and class dartdoc textfields better

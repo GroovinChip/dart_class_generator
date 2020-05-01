@@ -140,7 +140,7 @@ class _TabletUIState extends State<TabletUI> {
                             _class.dartdoc = dDoc;
                           });
                         },
-                        textCapitalization: TextCapitalization.words,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),

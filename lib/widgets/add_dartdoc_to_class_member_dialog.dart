@@ -62,7 +62,7 @@ class _AddDartdocToClassMemberDialogState extends State<AddDartdocToClassMemberD
                 members[memberIndex].dartdoc = dDoc;
               });
             },
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),

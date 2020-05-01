@@ -1,7 +1,7 @@
 name: dartclassgenerator
 description: A Flutter that can generate Dart classes. Runs on Android and Web.
 publish_to: 'none'
-version: 0.0.12
+version: 0.0.13
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
