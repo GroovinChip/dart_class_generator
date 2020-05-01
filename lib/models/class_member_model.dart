@@ -44,9 +44,14 @@ class ClassMember {
   }
 
   String field() {
-    final _dartdoc = dartdoc ?? '///todo: write documentation for member $name';
+    String _dartdoc;
     final sb = StringBuffer();
-    sb.writeln(_dartdoc);
+    if (dartdoc == null || dartdoc.isEmpty) {
+      _dartdoc = 'todo: write documentation for member $name';
+    } else {
+      _dartdoc = dartdoc;
+    }
+    sb.writeln('/// $_dartdoc');
     if (isFinal) {
       sb.write('final ');
     }

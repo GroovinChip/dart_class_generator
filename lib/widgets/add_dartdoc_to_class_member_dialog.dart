@@ -25,22 +25,14 @@ class _AddDartdocToClassMemberDialogState extends State<AddDartdocToClassMemberD
   @override
   void initState() {
     super.initState();
-    _initDartdocController();
-  }
-
-  void _initDartdocController() {
-    if (members[memberIndex].dartdoc == null) {
-      _memberDartdocController = TextEditingController(text: '///');
-    } else {
-      _memberDartdocController = TextEditingController(text: '${members[memberIndex].dartdoc}');
-    }
+    _memberDartdocController = TextEditingController();
+    _memberDartdocController.addListener(() {
+      setState(() => members[memberIndex].dartdoc = _memberDartdocController.text);
+    });
   }
 
   void _clearDartdocField() {
     _memberDartdocController.clear();
-    _memberDartdocController
-      ..value = TextEditingValue(text: '///')
-      ..selection = TextSelection.collapsed(offset: 3);
   }
 
   void _updateMemberDartdoc() {
@@ -58,9 +50,7 @@ class _AddDartdocToClassMemberDialogState extends State<AddDartdocToClassMemberD
           child: TextField(
             controller: _memberDartdocController,
             onChanged: (dDoc) {
-              setState(() {
-                members[memberIndex].dartdoc = dDoc;
-              });
+              setState(() => members[memberIndex].dartdoc = dDoc);
             },
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
@@ -80,9 +70,7 @@ class _AddDartdocToClassMemberDialogState extends State<AddDartdocToClassMemberD
             FlatButton(
               textColor: Theme.of(context).accentColor,
               child: Text('Add'),
-              onPressed: () {
-                _updateMemberDartdoc();
-              },
+              onPressed: () => _updateMemberDartdoc(),
             ),
           ],
         ),

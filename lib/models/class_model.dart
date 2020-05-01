@@ -34,9 +34,9 @@ class DartClass {
     /// write class dartdoc
     if (dartdoc == null || dartdoc.isEmpty) {
       if (name == null || name.isEmpty) {
-        _dartdoc = 'TODO: write documentation for class MyClass';
+        _dartdoc = 'todo: write documentation for class MyClass';
       } else {
-        _dartdoc = 'TODO: write documentation for class $name';
+        _dartdoc = 'todo: write documentation for class $name';
       }
     } else {
       _dartdoc = dartdoc;
